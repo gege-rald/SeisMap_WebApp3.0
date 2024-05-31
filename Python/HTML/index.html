@@ -1,0 +1,56 @@
+<!DOCTYPE <!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>SeisMap PH Web App</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link href="'https://unpkg.com/boxicons@2.1.4/css/boxicos.min.css" rel="'stylesheet">
+    </head>
+    <body>
+
+        <header class="header">
+            <a href="#" class ="logo">SeisMap PH.</a>
+
+            <nav class="navbar">
+                <a href="#home" class="active">Explore</a>
+                <a href="#clustering">Clustering</a>
+                <a href="#timeseries">Time Series</a>
+                <a href="#about">About</a>
+            </nav>
+        </header>
+
+        <script src="" async defer></script>
+
+        <section class="explore">
+            <div class="explore-content">
+            <h1>SeisMap Ph.</h1>
+            <h3>Website Application for Time Series and Clustering Analysis of Earthquake Occurences</h3>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti distinctio iusto esse debitis aspernatur libero tempora, nisi, cupiditate deserunt asperiores explicabo totam, ipsam ea perferendis. Autem numquam ut possimus obcaecati.</p>
+            <div class="btn-box">
+                <a href="#home">Get Started</a>
+                <a href="#clustering">Cluster</a>
+                <a href="#timeseries">Time Series</a>
+            </div>
+        </div>
+
+        <span class="home-imgHover" src="{{ url_for('static', filename='modified_seismap.svg')}}"></span>
+        </section>
+
+        <section id="home" class="main-section">
+            <iframe src="{{ url_for('static', filename='explore.html')}}" frameborder="0" scrolling="no" style="width: 100%; height: 700px;"></iframe>
+        </section>
+        <section id="clustering" class="main-section">Clustering</section>
+        <section id="timeseries" class="main-section">Time Series</section>
+        <section id="about" class="main-section">About</section>
+
+        <script src="{{ url_for('static', filename='script.js')}}"></script>
+    
+    </body>
+</html>
