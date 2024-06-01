@@ -180,3 +180,40 @@ document.addEventListener("DOMContentLoaded", () => {
   const maxVal = priceInputDepth[1].value;
   updateRange(minVal, maxVal, priceInputDepth, rangeDepth, rangeInputDepth[0]);
 });
+
+function increment_date(date_string, days) {
+  console.log(date_string);
+  const date = new Date(Date.parse(date_string));
+  date.setDate(date.getDate() + days);
+
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDay() + 1;
+
+  if (month.toString().length == 1) {
+    month = "0" + month;
+  }
+
+  if (day.toString().length == 1) {
+    day = "0" + day;
+  }
+
+  const formatted_date = `${year}-${month}-${day}`;
+  return formatted_date;
+}
+
+// Date range picker
+document.addEventListener("DOMContentLoaded", () => {
+  const [start_date_picker, end_date_picker] = document.querySelectorAll('.date-range-picker input[type="date"]');
+
+  start_date_picker.addEventListener("input", () => {
+    const incremented_date = increment_date(start_date_picker.value, 1);
+    console.log(incremented_date);
+    end_date_picker.min = incremented_date;
+  });
+
+  end_date_picker.addEventListener("input", () => {
+    const incremented_date = increment_date(end_date_picker.value, -1);
+    start_date_picker.max = incremented_date;
+  });
+});
