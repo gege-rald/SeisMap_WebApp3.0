@@ -182,13 +182,16 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function increment_date(date_string, days) {
-  console.log(date_string);
   const date = new Date(Date.parse(date_string));
   date.setDate(date.getDate() + days);
 
-  const year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  let day = date.getDay() + 1;
+  return format_date(date);
+}
+
+function format_date(date_obj) {
+  const year = date_obj.getFullYear();
+  let month = date_obj.getMonth() + 1;
+  let day = date_obj.getDate();
 
   if (month.toString().length == 1) {
     month = "0" + month;
@@ -202,17 +205,42 @@ function increment_date(date_string, days) {
   return formatted_date;
 }
 
+function constraint_date({ value, min, max }) {
+  const input_date = new Date(value);
+  const min_date = new Date(min);
+  const max_date = new Date(max);
+
+  let constrainted_date;
+
+  if (min_date.getTime() < input_date.getTime()) {
+    constrainted_date = input_date;
+  } else {
+    constrainted_date = min_date;
+  }
+
+  if (max_date.getTime() > constrainted_date.getTime()) {
+    constrainted_date = constrainted_date;
+  } else {
+    constrainted_date = max_date;
+  }
+
+  return format_date(constrainted_date);
+}
+
 // Date range picker
 document.addEventListener("DOMContentLoaded", () => {
   const [start_date_picker, end_date_picker] = document.querySelectorAll('.date-range-picker input[type="date"]');
 
   start_date_picker.addEventListener("input", () => {
+    start_date_picker.value = constraint_date(start_date_picker);
+
     const incremented_date = increment_date(start_date_picker.value, 1);
-    console.log(incremented_date);
     end_date_picker.min = incremented_date;
   });
 
   end_date_picker.addEventListener("input", () => {
+    end_date_picker.value = constraint_date(end_date_picker);
+
     const incremented_date = increment_date(end_date_picker.value, -1);
     start_date_picker.max = incremented_date;
   });
