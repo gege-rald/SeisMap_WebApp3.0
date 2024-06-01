@@ -55,8 +55,15 @@ let priceGap = 0; // Adjust the gap between allowed values
 function updateRange(minVal, maxVal) {
   priceInput[0].value = minVal.toFixed(1);
   priceInput[1].value = maxVal.toFixed(1);
-  range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";
-  range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+
+  const true_min = rangeInput[0].min;
+  const true_max = rangeInput[0].max;
+
+  const min_val_ratio = (minVal - true_min) / (true_max - true_min);
+  const max_val_ratio = (maxVal - true_min) / (true_max - true_min);
+
+  range.style.left = (min_val_ratio * 100) + "%";
+  range.style.right = 100 - (max_val_ratio * 100) + "%";
 }
 
 function validateInput(value, min, max) {
