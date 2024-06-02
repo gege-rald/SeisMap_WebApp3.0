@@ -267,6 +267,11 @@ body{
     letter-spacing: 1px;
     margin-left: 75px;
     overflow: hidden;
-    transition: .5s;
+    transition: background-color 0.5s ease; /* Existing transition for smooth color change */
+  }
+  
+  .get-started-button:hover {
+    background-color: #081b29; /* New background color on hover (lighter shade of blue) */
+    color: #00abf0;
   }
   
