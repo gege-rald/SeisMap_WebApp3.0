@@ -23,17 +23,27 @@
   margin: 0 !important;
 }
 
-label.clusters-input {
+label.clusters-input,
+label.clustering-input {
   padding: 20px 25px 40px;
   display: grid;
   justify-items: center;
 }
 
-.clusters-input input {
+.clusters-input input,
+.clustering-input select {
   font-size: 19px;
-  width: 100px;
   text-align: center;
   padding: 0.5ch 1ch;
   margin: 0;
-  -moz-appearance: unset;
+  -moz-appearance: initial;
+}
+
+.clusters-input input {
+  width: 100px;
+}
+
+.clustering-input select {
+  width: 150px;
+  appearance: menulist;
 }

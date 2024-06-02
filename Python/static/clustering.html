@@ -19,12 +19,23 @@
     <div id="form-container">
       <h2>Clustering Visualization</h2>
 
+      <label for="clustering-algorithm" class="clustering-input field">
+        <header>
+          <h2>Clustering Algorithm</h2>
+        </header>
+        <select name="clustering-algorithm" id="clustering-algorithm">
+          <option value="dbscan">DBSCAN</option>
+          <option value="minibatch-kmeans">Mini Batch K-means</option>
+        </select>
+      </label>
+
       <label for="clusters" class="clusters-input field">
         <header>
           <h2>Labeled Clusters</h2>
         </header>
         <input type="number" id="clusters" name="clusters" min="3" max="50" value="10" />
       </label>
+
       <div class="wrapper">
         <header>
           <h2>Magnitude Range</h2>
