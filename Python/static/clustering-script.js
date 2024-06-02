@@ -6,8 +6,6 @@ document.addEventListener("paste", event => {
   parse_pasted_value(pasted_value);
 });
 
-const data = [];
-
 function parse_pasted_value(string) {
   const possible_separators = ["\t", ","];
   const arguments_to_parse = 6;
@@ -34,7 +32,8 @@ function parse_pasted_value(string) {
   console.log("values:", first_line.split(separator));
 }
 
-function generate_table(_rows) {
+const data_rows = [generate_row()];
+function generate_table(rows) {
   const Header = children(document.createElement('tr'),
     [
       "Date - Time (Philippine Time)",
@@ -54,22 +53,34 @@ function generate_table(_rows) {
   const add_row_button = document.createElement('button');
   add_row_button.classList.add('add-row-button');
   add_row_button.textContent = "Add row";
-  add_row_button.addEventListener("click", add_row);
+  add_row_button.addEventListener("click", () => {
+    data_rows.push(generate_row());
+    const new_table = generate_table(data_rows);
+    console.log(new_table);
+
+    replace_node(dataset_table_element, new_table);
+    dataset_table_element = new_table;
+  });
+
+  const table_children = [];
+  if (rows) {
+    table_children.push(rows);
+  }
+
+  const add_row_cell = document.createElement('td');
+  add_row_cell.setAttribute('colspan', 6);
+  add_row_cell.classList.add('add-row-cell');
+
+  const add_row_table_row = children(document.createElement('tr'),
+    children(add_row_cell,
+      add_row_button,
+    ),
+  );
+  table_children.push(add_row_table_row);
 
   const Table = children(document.createElement("table"),
     Header,
-    generate_row(),
-    children(document.createElement('tr'),
-      children((() => {
-	const add_row_cell = document.createElement('td');
-	add_row_cell.setAttribute('colspan', 6);
-	add_row_cell.classList.add('add-row-cell');
-
-	return add_row_cell;
-      })(),
-	add_row_button,
-      ),
-    ),
+    table_children,
   );
 
   return Table;
@@ -79,7 +90,7 @@ function add_row() {
   alert("here");
 }
 
-function generate_row(_idx) {
+function generate_row() {
   const form_elements = [];
   {
     const DateTime = document.createElement('input');
@@ -145,9 +156,11 @@ function generate_row(_idx) {
   return Row;
 }
 
+let dataset_table_element;
 document.addEventListener("DOMContentLoaded", () => {
-  const Table = generate_table();
+  const Table = generate_table(data_rows);
   const dummy_table = document.querySelector('#dummy-table');
 
   replace_node(dummy_table, Table);
+  dataset_table_element = Table;
 });

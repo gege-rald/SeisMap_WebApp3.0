@@ -1,7 +1,7 @@
 function children(root, ...children) {
 	if (children.length === 0 || children == null) return root;
 
-	return children.flat().reduce((acc, el) => {
+	return children.flat(Infinity).reduce((acc, el) => {
 		acc.appendChild(el);
 		return acc;
 	}, root);
