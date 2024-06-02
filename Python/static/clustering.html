@@ -111,16 +111,54 @@
         <button class="get-started-button">Perform clustering</button>
       </div>
 
+      <div class="button-wrapper">
+        <button class="dataset-update-button" onclick="document.querySelector('#dataset-updater-popup').showModal()">
+          Dataset Update
+        </button>
+      </div>
+
     </div>
 
 
-  </div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="explore-script.js"></script>
 
+  <dialog id="dataset-updater-popup">
+    <div class="dataset-wrapper">
+      <header class="dataset-popup-header">
+        <h1>Dataset update</h1>
+      </header>
+
+      <table>
+        <tr>
+          <th>Date - Time (Philippine Time)</th>
+          <th>Latitude (ºN)</th>
+          <th>Longitude (ºE)</th>
+          <th>Depth (km)</th>
+          <th>Magnitude</th>
+          <th>Location</th>
+        </tr>
+
+        <tr>
+          <td>thing</td>
+          <td>thing</td>
+          <td>thing</td>
+          <td>thing</td>
+          <td>thing</td>
+          <td>thing</td>
+        </tr>
+
+        <tr>
+          <td colspan="6" class="add-row-cell">
+            <button class="add-row-button">Add row</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </dialog>
 
 </body>
 
