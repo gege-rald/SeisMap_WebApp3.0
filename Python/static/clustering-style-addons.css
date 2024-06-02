@@ -1,0 +1,39 @@
+#form-container {
+  height: calc(600px * 1.2);
+  overflow-y: scroll;
+  scrollbar-width: 20px;
+}
+
+#container {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+}
+
+#map-container {
+  width: 100%;
+}
+
+.button-wrapper {
+  display: grid;
+  place-content: center center;
+  padding-bottom: 20px;
+}
+
+.button-wrapper .get-started-button {
+  margin: 0 !important;
+}
+
+label.clusters-input {
+  padding: 20px 25px 40px;
+  display: grid;
+  justify-items: center;
+}
+
+.clusters-input input {
+  font-size: 19px;
+  width: 100px;
+  text-align: center;
+  padding: 0.5ch 1ch;
+  margin: 0;
+  -moz-appearance: unset;
+}
