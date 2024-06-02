@@ -3,7 +3,17 @@ document.addEventListener("paste", event => {
   alert(`got value: ${pasted_value}`);
   console.log(pasted_value);
 
-  parse_pasted_value(pasted_value);
+  const dataset_row_obj = parse_pasted_value(pasted_value);
+  console.log(dataset_row_obj);
+
+  // TODO: put inside a function
+  for (const generated_row of dataset_row_obj) {
+    data_rows.push(generate_row(generated_row));
+  }
+  const new_table = generate_table(data_rows);
+
+  replace_node(dataset_table_element, new_table);
+  dataset_table_element = new_table;
 });
 
 function parse_pasted_value(string) {
@@ -17,7 +27,6 @@ function parse_pasted_value(string) {
   console.log("contains?", first_line.search(/\t/));
   for (const sep of possible_separators) {
     const value = first_line.split(sep).length;
-    console.log(value);
 
     if (value == arguments_to_parse) {
       separator = sep;
@@ -28,11 +37,45 @@ function parse_pasted_value(string) {
     alert("invalid pasted value: could not parse input.");
     return;
   }
-  alert("success!");
-  console.log("values:", first_line.split(separator));
+
+  const parsed_values = [];
+  for (const line of lines) {
+    const arguments = line.split(separator).map(arg => arg.trim());
+    let [date_time, latitude, longitude, depth, magnitude, location] = arguments;
+    console.log(arguments);
+
+    const date_in_millis = Date.parse(date_time.replace("-", ","));
+    console.log(date_in_millis);
+    if (isNaN(date_in_millis)) {
+      throw new Error("Parsing of date failed.");
+    }
+
+    // solution in: https://stackoverflow.com/questions/30166338/setting-value-of-datetime-local-from-date/61082536#61082536
+    {
+      now = new Date(date_in_millis);
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      date_time = now.toISOString().slice(0,16);
+    }
+
+    latitude = parseFloat(latitude);
+    longitude = parseFloat(longitude);
+    depth = parseInt(depth);
+    magnitude = parseFloat(magnitude);
+    
+    parsed_values.push({
+      date_time,
+      latitude,
+      longitude,
+      depth,
+      magnitude,
+      location,
+    });
+  }
+
+  return parsed_values;
 }
 
-const data_rows = [generate_row()];
+const data_rows = [generate_row({})];
 function generate_table(rows) {
   const Header = children(document.createElement('tr'),
     [
@@ -54,7 +97,7 @@ function generate_table(rows) {
   add_row_button.classList.add('add-row-button');
   add_row_button.textContent = "Add row";
   add_row_button.addEventListener("click", () => {
-    data_rows.push(generate_row());
+    data_rows.push(generate_row({}));
     const new_table = generate_table(data_rows);
     console.log(new_table);
 
@@ -90,22 +133,21 @@ function add_row() {
   alert("here");
 }
 
-function generate_row() {
+function generate_row({
+    date_time = "2024-01-01T00:00",
+    latitude = 21.1,
+    longitude = 21.1,
+    depth = 0,
+    magnitude = 5.0,
+    location = "",
+}) {
   const form_elements = [];
   {
     const DateTime = document.createElement('input');
     DateTime.setAttribute('type', 'datetime-local');
 
+    DateTime.setAttribute('value', date_time);
     form_elements.push(DateTime);
-  }
-  {
-    const Longitude = document.createElement('input');
-    Longitude.setAttribute('type', 'number');
-    Longitude.setAttribute('min', -180);
-    Longitude.setAttribute('max', 180);
-
-    Longitude.setAttribute('value', 0);
-    form_elements.push(Longitude);
   }
   {
     const Latitude = document.createElement('input');
@@ -113,8 +155,17 @@ function generate_row() {
     Latitude.setAttribute('min', -90);
     Latitude.setAttribute('max', 90);
 
-    Latitude.setAttribute('value', 0);
+    Latitude.setAttribute('value', latitude);
     form_elements.push(Latitude);
+  }
+  {
+    const Longitude = document.createElement('input');
+    Longitude.setAttribute('type', 'number');
+    Longitude.setAttribute('min', -180);
+    Longitude.setAttribute('max', 180);
+
+    Longitude.setAttribute('value', longitude);
+    form_elements.push(Longitude);
   }
   {
     const Depth = document.createElement('input');
@@ -122,7 +173,7 @@ function generate_row() {
     Depth.setAttribute('min', 0);
     Depth.setAttribute('max', 999);
 
-    Depth.setAttribute('value', 2);
+    Depth.setAttribute('value', depth);
     form_elements.push(Depth);
   }
   {
@@ -132,7 +183,7 @@ function generate_row() {
     Magnitude.setAttribute('max', 10.0);
     Magnitude.setAttribute('step', 0.1);
 
-    Magnitude.setAttribute('value', 5.0);
+    Magnitude.setAttribute('value', magnitude);
     form_elements.push(Magnitude);
   }
   {
@@ -142,7 +193,7 @@ function generate_row() {
     Location.setAttribute('maxlength', 255);
     Location.setAttribute('size', 20);
 
-    Location.setAttribute('placeholder', "25km coast of Bohol...");
+    Location.setAttribute('placeholder', location);
     form_elements.push(Location);
   }
  
