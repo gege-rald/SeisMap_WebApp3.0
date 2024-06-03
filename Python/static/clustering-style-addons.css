@@ -65,6 +65,11 @@ dialog#paste-interface-popup {
   border: none;
 }
 
+#dataset-updater-popup {
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+}
+
 th,
 td {
   background-color: white;
@@ -98,6 +103,10 @@ td {
 .option-buttons {
   display: flex;
   flex-direction: row;
+}
+
+.dataset-buttons {
+  flex-direction: row-reverse;
 }
 
 .option-buttons li {

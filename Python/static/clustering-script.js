@@ -240,6 +240,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const Table = generate_table(data_rows);
   const dummy_table = document.querySelector('#dummy-table');
 
+  const dataset_update_button = document.querySelector('.add-to-dataset-button');
+  dataset_update_button.addEventListener('click', () => {
+    // TODO: expand to really send data
+    const yes = confirm("Are you sure you want to add to the dataset?");
+    if (yes) {
+      const dataset_popup = document.querySelector('#dataset-updater-popup');
+      dataset_popup.close();
+    }
+  });
+
   replace_node(dummy_table, Table);
   dataset_table_element = Table;
 });
