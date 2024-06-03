@@ -1,12 +1,37 @@
 document.addEventListener("paste", event => {
   const pasted_value = event.clipboardData.getData("text");
-  alert(`got value: ${pasted_value}`);
-  console.log(pasted_value);
+  show_paste_interface(pasted_value);
+});
 
-  const dataset_row_obj = parse_pasted_value(pasted_value);
-  console.log(dataset_row_obj);
+let pasted_data;
+function show_paste_interface(pasted_value) {
+  const max_characters_to_show = 100;
 
-  // TODO: put inside a function
+  let preview_paste = pasted_value.split('\n')[0];
+  if (preview_paste.length > max_characters_to_show) {
+    preview_paste = preview_paste.slice(0, max_characters_to_show);
+  }
+  preview_paste += "...";
+
+  const paste_preview = document.querySelector('#pasted-value-preview');
+  paste_preview.textContent = preview_paste;
+
+  pasted_data = pasted_value;
+
+  const paste_interface_popup = document.querySelector('#paste-interface-popup');
+  paste_interface_popup.showModal();
+}
+
+function add_pasted_values({ override = false }) {
+  if (!pasted_data) {
+    return;
+  }
+
+  if (override) {
+    data_rows = [];
+  }
+
+  const dataset_row_obj = parse_pasted_value(pasted_data);
   for (const generated_row of dataset_row_obj) {
     data_rows.push(generate_row(generated_row));
   }
@@ -14,7 +39,13 @@ document.addEventListener("paste", event => {
 
   replace_node(dataset_table_element, new_table);
   dataset_table_element = new_table;
-});
+
+  const paste_interface_popup = document.querySelector('#paste-interface-popup');
+  const dataset_popup = document.querySelector('#dataset-updater-popup');
+
+  paste_interface_popup.close();
+  dataset_popup.showModal();
+}
 
 function parse_pasted_value(string) {
   const possible_separators = ["\t", ","];
@@ -75,7 +106,7 @@ function parse_pasted_value(string) {
   return parsed_values;
 }
 
-const data_rows = [generate_row({})];
+let data_rows = [generate_row({})];
 function generate_table(rows) {
   const Header = children(document.createElement('tr'),
     [

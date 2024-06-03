@@ -183,8 +183,8 @@
       </div>
 
       <ul class="option-buttons">
-        <li><button>Append the update table</button></li>
-        <li><button>Overwrite the update table</button></li>
+        <li><button onclick="add_pasted_values({override: false});">Append the update table</button></li>
+        <li><button onclick="add_pasted_values({override: true});">Overwrite the update table</button></li>
         <li><button onclick="document.querySelector('#paste-interface-popup').close();">Cancel</button></li>
       </ul>
     </div>
