@@ -23,7 +23,16 @@ function show_paste_interface(pasted_value) {
 }
 
 function add_pasted_values({ override = false }) {
-  if (!pasted_data) {
+  let dataset_row_obj;
+  const paste_interface_popup = document.querySelector('#paste-interface-popup');
+  const dataset_popup = document.querySelector('#dataset-updater-popup');
+
+  try {
+    dataset_row_obj = parse_pasted_value(pasted_data);
+
+  } catch (error) {
+    alert(error);
+    paste_interface_popup.close();
     return;
   }
 
@@ -31,7 +40,6 @@ function add_pasted_values({ override = false }) {
     data_rows = [];
   }
 
-  const dataset_row_obj = parse_pasted_value(pasted_data);
   for (const generated_row of dataset_row_obj) {
     data_rows.push(generate_row(generated_row));
   }
@@ -39,9 +47,6 @@ function add_pasted_values({ override = false }) {
 
   replace_node(dataset_table_element, new_table);
   dataset_table_element = new_table;
-
-  const paste_interface_popup = document.querySelector('#paste-interface-popup');
-  const dataset_popup = document.querySelector('#dataset-updater-popup');
 
   paste_interface_popup.close();
   dataset_popup.showModal();
@@ -55,7 +60,6 @@ function parse_pasted_value(string) {
   const lines = string.split("\n");
   const first_line = lines[0];
 
-  console.log("contains?", first_line.search(/\t/));
   for (const sep of possible_separators) {
     const value = first_line.split(sep).length;
 
@@ -65,15 +69,13 @@ function parse_pasted_value(string) {
   }
 
   if (!separator) {
-    alert("invalid pasted value: could not parse input.");
-    return;
+    throw new Error("Invalid format for parsing pasted values.");
   }
 
   const parsed_values = [];
   for (const line of lines) {
     const arguments = line.split(separator).map(arg => arg.trim());
     let [date_time, latitude, longitude, depth, magnitude, location] = arguments;
-    console.log(arguments);
 
     const date_in_millis = Date.parse(date_time.replace("-", ","));
     console.log(date_in_millis);
@@ -106,7 +108,7 @@ function parse_pasted_value(string) {
   return parsed_values;
 }
 
-let data_rows = [generate_row({})];
+let data_rows = [];
 function generate_table(rows) {
   const Header = children(document.createElement('tr'),
     [
@@ -130,7 +132,6 @@ function generate_table(rows) {
   add_row_button.addEventListener("click", () => {
     data_rows.push(generate_row({}));
     const new_table = generate_table(data_rows);
-    console.log(new_table);
 
     replace_node(dataset_table_element, new_table);
     dataset_table_element = new_table;
@@ -158,10 +159,6 @@ function generate_table(rows) {
   );
 
   return Table;
-}
-
-function add_row() {
-  alert("here");
 }
 
 function generate_row({
