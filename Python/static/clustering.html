@@ -159,6 +159,39 @@
           </td>
         </tr>
       </table>
+
+      <ul class="option-buttons dataset-buttons">
+        <li><button class="add-to-dataset-button">Add to dataset</button></li>
+        <li><button onclick="document.querySelector('#dataset-updater-popup').close();">Cancel</button></li>
+      </ul>
+    </div>
+  </dialog>
+
+  <dialog id="paste-interface-popup">
+    <div class="dialog-wrapper">
+      <div class="paste-notif">
+        <header>
+          <h2>Pasting values</h2>
+        </header>
+        <p>
+          It seems that you pasted some values for updating the dataset. What would you want to do?
+        </p>
+      </div>
+
+      <div class="paste-preview">
+        <header>
+          <h3>Preview </h3>
+        </header>
+        <p id="pasted-value-preview">
+          Lorem ipsum dolor sit amet, qui minim labore adipisicing minim...
+        </p>
+      </div>
+
+      <ul class="option-buttons">
+        <li><button onclick="add_pasted_values({override: false});">Append the update table</button></li>
+        <li><button onclick="add_pasted_values({override: true});">Overwrite the update table</button></li>
+        <li><button onclick="document.querySelector('#paste-interface-popup').close();">Cancel</button></li>
+      </ul>
     </div>
   </dialog>
 

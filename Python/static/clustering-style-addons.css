@@ -54,7 +54,8 @@ dialog:modal {
   max-height: 100%;
 }
 
-dialog#dataset-updater-popup {
+dialog#dataset-updater-popup,
+dialog#paste-interface-popup {
   display: grid;
   place-content: center;
   grid-auto-flow: row;
@@ -62,6 +63,11 @@ dialog#dataset-updater-popup {
   height: 120%;
   background-color: #ccc9c6bb;
   border: none;
+}
+
+#dataset-updater-popup {
+  padding-top: 5rem;
+  padding-bottom: 3rem;
 }
 
 th,
@@ -92,4 +98,27 @@ td {
   border: none;
   border-radius: 0;
   background-color: white;
+}
+
+.option-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.dataset-buttons {
+  flex-direction: row-reverse;
+}
+
+.option-buttons li {
+  list-style-type: none;
+}
+
+.dialog-wrapper {
+  display: grid;
+  grid-auto-flow: row;
+  gap: 2rem;
+  padding: 1rem 2rem;
+  border: 5px solid black;
+  border-radius: 1ch;
+  background: white;
 }

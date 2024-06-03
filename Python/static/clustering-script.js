@@ -1,12 +1,45 @@
 document.addEventListener("paste", event => {
   const pasted_value = event.clipboardData.getData("text");
-  alert(`got value: ${pasted_value}`);
-  console.log(pasted_value);
+  show_paste_interface(pasted_value);
+});
 
-  const dataset_row_obj = parse_pasted_value(pasted_value);
-  console.log(dataset_row_obj);
+let pasted_data;
+function show_paste_interface(pasted_value) {
+  const max_characters_to_show = 100;
 
-  // TODO: put inside a function
+  let preview_paste = pasted_value.split('\n')[0];
+  if (preview_paste.length > max_characters_to_show) {
+    preview_paste = preview_paste.slice(0, max_characters_to_show);
+  }
+  preview_paste += "...";
+
+  const paste_preview = document.querySelector('#pasted-value-preview');
+  paste_preview.textContent = preview_paste;
+
+  pasted_data = pasted_value;
+
+  const paste_interface_popup = document.querySelector('#paste-interface-popup');
+  paste_interface_popup.showModal();
+}
+
+function add_pasted_values({ override = false }) {
+  let dataset_row_obj;
+  const paste_interface_popup = document.querySelector('#paste-interface-popup');
+  const dataset_popup = document.querySelector('#dataset-updater-popup');
+
+  try {
+    dataset_row_obj = parse_pasted_value(pasted_data);
+
+  } catch (error) {
+    alert(error);
+    paste_interface_popup.close();
+    return;
+  }
+
+  if (override) {
+    data_rows = [];
+  }
+
   for (const generated_row of dataset_row_obj) {
     data_rows.push(generate_row(generated_row));
   }
@@ -14,7 +47,10 @@ document.addEventListener("paste", event => {
 
   replace_node(dataset_table_element, new_table);
   dataset_table_element = new_table;
-});
+
+  paste_interface_popup.close();
+  dataset_popup.showModal();
+}
 
 function parse_pasted_value(string) {
   const possible_separators = ["\t", ","];
@@ -24,7 +60,6 @@ function parse_pasted_value(string) {
   const lines = string.split("\n");
   const first_line = lines[0];
 
-  console.log("contains?", first_line.search(/\t/));
   for (const sep of possible_separators) {
     const value = first_line.split(sep).length;
 
@@ -34,15 +69,13 @@ function parse_pasted_value(string) {
   }
 
   if (!separator) {
-    alert("invalid pasted value: could not parse input.");
-    return;
+    throw new Error("Invalid format for parsing pasted values.");
   }
 
   const parsed_values = [];
   for (const line of lines) {
     const arguments = line.split(separator).map(arg => arg.trim());
     let [date_time, latitude, longitude, depth, magnitude, location] = arguments;
-    console.log(arguments);
 
     const date_in_millis = Date.parse(date_time.replace("-", ","));
     console.log(date_in_millis);
@@ -75,7 +108,7 @@ function parse_pasted_value(string) {
   return parsed_values;
 }
 
-const data_rows = [generate_row({})];
+let data_rows = [];
 function generate_table(rows) {
   const Header = children(document.createElement('tr'),
     [
@@ -99,7 +132,6 @@ function generate_table(rows) {
   add_row_button.addEventListener("click", () => {
     data_rows.push(generate_row({}));
     const new_table = generate_table(data_rows);
-    console.log(new_table);
 
     replace_node(dataset_table_element, new_table);
     dataset_table_element = new_table;
@@ -127,10 +159,6 @@ function generate_table(rows) {
   );
 
   return Table;
-}
-
-function add_row() {
-  alert("here");
 }
 
 function generate_row({
@@ -211,6 +239,16 @@ let dataset_table_element;
 document.addEventListener("DOMContentLoaded", () => {
   const Table = generate_table(data_rows);
   const dummy_table = document.querySelector('#dummy-table');
+
+  const dataset_update_button = document.querySelector('.add-to-dataset-button');
+  dataset_update_button.addEventListener('click', () => {
+    // TODO: expand to really send data
+    const yes = confirm("Are you sure you want to add to the dataset?");
+    if (yes) {
+      const dataset_popup = document.querySelector('#dataset-updater-popup');
+      dataset_popup.close();
+    }
+  });
 
   replace_node(dummy_table, Table);
   dataset_table_element = Table;
