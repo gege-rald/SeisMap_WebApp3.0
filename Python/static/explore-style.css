@@ -286,7 +286,8 @@ input[type="range"]::-moz-range-thumb {
 
 /* Button */
 .get-started-button,
-.dataset-update-button {
+.dataset-update-button,
+.option-buttons button {
   background-color: #00abf0;
   /* Black background color */
   color: #081b29;
@@ -314,7 +315,8 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .get-started-button:hover,
-.dataset-update-button:hover {
+.dataset-update-button:hover,
+.option-buttons button:hover {
   background-color: #081b29;
   /* New background color on hover (lighter shade of blue) */
   color: #00abf0;
