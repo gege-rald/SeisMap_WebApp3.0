@@ -1,0 +1,54 @@
+import sqlite3
+import pandas as pd
+from datetime import datetime
+
+def parse_date_time(date_time_str):
+    # Example format: "31 Jan 2017 - 11:55 PM"
+    return datetime.strptime(date_time_str, "%d %b %Y - %I:%M %p")
+
+def create_table(conn):
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS earthquake_data (
+            Date_Time TEXT,
+            Latitude REAL,
+            Longitude REAL,
+            Depth REAL,
+            Mag REAL,
+            Location TEXT
+        )
+    ''')
+    conn.commit()
+
+def insert_data(conn, data):
+    cursor = conn.cursor()
+    for row in data.itertuples(index=False):
+        cursor.execute('''
+            INSERT INTO earthquake_data (Date_Time, Latitude, Longitude, Depth, Mag, Location)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', row)
+    conn.commit()
+
+def excel_to_sqlite(excel_file, db_file):
+    # Read Excel file
+    df = pd.read_excel(excel_file)
+
+    # Parse Date_Time column
+    df['Date_Time'] = df['Date_Time'].apply(parse_date_time)
+
+    # Connect to SQLite database
+    conn = sqlite3.connect(db_file)
+
+    # Create table if not exists
+    create_table(conn)
+
+    # Insert data into database
+    insert_data(conn, df)
+
+    # Close connection
+    conn.close()
+
+if __name__ == "__main__":
+    excel_file = "your_excel_file.xlsx"
+    db_file = "your_database.db"
+    excel_to_sqlite(excel_file, db_file)

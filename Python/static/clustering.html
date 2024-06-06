@@ -17,11 +17,11 @@
       <div id="map"></div>
     </div>
     <div id="form-container">
-      <h2>Clustering Visualization</h2>
-
-      <label for="clustering-algorithm" class="clustering-input field">
+      <h2>Cluster</h2>
+      <div class="dropdowns">
+      <label for="clustering-algorithm" class="clustering-input">
         <header>
-          <h2>Clustering Algorithm</h2>
+          <h3>Algorithm</h3>
         </header>
         <select name="clustering-algorithm" id="clustering-algorithm">
           <option value="dbscan">DBSCAN</option>
@@ -29,12 +29,14 @@
         </select>
       </label>
 
-      <label for="clusters" class="clusters-input field">
+      <label for="clusters" class="clusters-input">
         <header>
-          <h2>Labeled Clusters</h2>
+          <h3>Labeled Clusters</h3>
         </header>
-        <input type="number" id="clusters" name="clusters" min="3" max="50" value="10" />
+        <input type="number" id="clusters" name="clusters" min="3" max="50" value="3" />
       </label>
+
+      </div>
 
       <div class="wrapper">
         <header>
@@ -108,7 +110,7 @@
 
 
       <div class="button-wrapper">
-        <button class="get-started-button">Perform clustering</button>
+        <button class="get-started-button" id="submit-button">Perform clustering</button>
       </div>
 
       <div class="button-wrapper">

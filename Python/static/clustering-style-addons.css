@@ -24,35 +24,60 @@
   margin: 0 !important;
 }
 
+.container {
+  align-items: center;
+  display: flex;
+}
+
+.dropdowns{
+  width: 400px;
+  background: #051622;
+  border-radius: 10px;
+  padding: 20px 25px 40px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+}
+
+.clustering-input label{
+  flex: 1;
+}
+
 label.clusters-input,
 label.clustering-input {
-  padding: 20px 25px 40px;
-  display: grid;
-  justify-items: center;
+  /* flex: 1; */
+  padding: 10px 15px 20px;
+  width: 150px;
+  display: flex; /* Enable flexbox layout */
+  align-items: center; /* Vertically align elements within labels */
+  margin-right: 10px; /* Add spacing between labels (optional) */
 }
 
 .clusters-input input,
 .clustering-input select {
-  font-size: 19px;
+  font-size: 15px;
   text-align: center;
   padding: 0.5ch 1ch;
   margin: 0;
   -moz-appearance: initial;
+  /* flex: 1; */
 }
 
 .clusters-input input {
-  width: 100px;
+  width: 80px;
+  /* flex: 1; */
 }
 
 .clustering-input select {
   width: 150px;
   appearance: menulist;
+  flex: 1;
 }
 
 dialog:modal {
   max-width: 100%;
   max-height: 100%;
 }
+
+
 
 dialog#dataset-updater-popup,
 dialog#paste-interface-popup {
