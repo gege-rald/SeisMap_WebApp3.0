@@ -263,8 +263,6 @@ document.addEventListener("DOMContentLoaded", () => {
       clusters_input.disabled = false;
     }
   });
-
-  clusters_input.disabled = true;
 });
 
 
