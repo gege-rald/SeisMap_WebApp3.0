@@ -18,16 +18,94 @@
       <header>
         <h1>15 Days Earthquake Occurence Forecast</h1>
       </header>
-      <label for="forecast-algorithm">
-        <header>
-          <h2>Algorithm</h2>
-        </header>
-        <select name="forecast-algorithm" id="forecast-algorithm">
-          <option value="lstm">LSTM</option>
-          <option value="arima">ARIMA</option>
-          <option value="sarima">SARIMA</option>
-        </select>
-      </label>
+
+      <table id="forecast-table">
+        <tr>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+          <th>6</th>
+          <th>7</th>
+          <th>8</th>
+          <th>9</th>
+          <th>10</th>
+          <th>11</th>
+          <th>12</th>
+          <th>13</th>
+          <th>14</th>
+          <th>15</th>
+        </tr>
+
+        <tr>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+          <td class="actual-data">0.0</td>
+        </tr>
+
+        <tr>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+          <td class="forecast-data">0.0</td>
+        </tr>
+      </table>
+
+      <div class="legend-selection-wrapper">
+        <label for="forecast-algorithm" class="forecast-algorithm">
+          <header>
+            <h2>Algorithm</h2>
+          </header>
+          <select name="forecast-algorithm" id="forecast-algorithm">
+            <option value="lstm">LSTM</option>
+            <option value="arima">ARIMA</option>
+            <option value="sarima">SARIMA</option>
+          </select>
+        </label>
+
+        <div class="table-legend">
+          <header>
+            <h2>Legend:</h2>
+          </header>
+
+          <ul>
+            <li>
+              <span class="actual-data">0.0</span>
+              <span>-</span>
+              <span>Actual Data</span>
+            </li>
+            <li>
+              <span class="forecast-data">0</span>
+              <span>-</span>
+              <span>Forecasted Data</span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <div id="form-container">

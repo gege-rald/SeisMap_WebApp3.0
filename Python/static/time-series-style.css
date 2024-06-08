@@ -1,6 +1,11 @@
 #forecast-container {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-direction: column;
+  height: 700px;
+  padding: 3rem;
   color: white;
-  height: calc(700px);
 }
 
 .button-wrapper.row-flow {
@@ -13,4 +18,39 @@
 
 .button-wrapper.row-flow button {
   margin: 0;
+}
+
+#forecast-table * {
+  border: none;
+  color: #081b29;
+}
+
+#forecast-table th,
+#forecast-table td {
+  width: 3rem;
+  aspect-ratio: 1;
+  padding: 1rem;
+}
+
+.forecast-data {
+  text-decoration: underline solid orange 3px;
+}
+
+.legend-selection-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+label.forecast-algorithm {
+  display: flex;
+  gap: 1em;
+}
+
+.table-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 1ch;
 }
