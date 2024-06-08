@@ -1,3 +1,7 @@
+#forecast-container {
+  overflow-y: scroll;
+}
+
 .content-wrapper,
 #forecast-container {
   display: flex;
