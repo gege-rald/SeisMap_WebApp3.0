@@ -285,9 +285,10 @@ input[type="range"]::-moz-range-thumb {
 
 
 /* Button */
-.get-started-button,
-.dataset-update-button,
+.button-wrapper button,
 .option-buttons button {
+  display: grid;
+  place-content: center;
   background-color: #00abf0;
   /* Black background color */
   color: #081b29;

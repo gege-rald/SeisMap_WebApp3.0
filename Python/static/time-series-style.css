@@ -1,0 +1,136 @@
+#forecast-container {
+  overflow-y: scroll;
+}
+
+.content-wrapper,
+#forecast-container {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-direction: column;
+  height: 700px;
+  padding: 3rem;
+  color: white;
+}
+
+.content-wrapper {
+  padding: 3rem 0;
+}
+
+#forecast-container h1 {
+  font-size: 2.25rem;
+}
+
+.prediction-month {
+  width: 100%;
+}
+
+.prediction-month h2 {
+  text-align: center;
+}
+
+.button-wrapper.row-flow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2rem;
+  padding: 20px 25px 40px;
+}
+
+.button-wrapper.row-flow button {
+  margin: 0;
+}
+
+#forecast-table * {
+  border: none;
+  color: #081b29;
+}
+
+#forecast-table th,
+#forecast-table td {
+  width: 3rem;
+  aspect-ratio: 1;
+  padding: 1rem;
+}
+
+.forecast-data {
+  text-decoration: underline solid orange 3px;
+}
+
+.legend-selection-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+label.forecast-algorithm {
+  display: flex;
+  gap: 1em;
+}
+
+.table-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 1ch;
+}
+
+/* idea from: https://codepen.io/erikterwan/pen/EVzeRP */
+.toggle-wrapper,
+.start-date-wrapper {
+  display: grid;
+  place-content: center;
+  width: 100%;
+}
+
+.start-date-wrapper label {
+  display: flex;
+  gap: 1em;
+}
+
+.graph-toggle {
+  position: relative;
+  overflow: visible;
+}
+
+.graph-toggle input {
+  position: absolute;
+  opacity: 0;
+  z-index: 2;
+}
+
+.graph-toggle .mock-toggle {
+  text-align: right;
+  position: absolute;
+  width: 150px;
+  padding: 1rem;
+  border: 1px solid gray;
+  border-radius: 7px;
+  color: black;
+  background-color: white;
+}
+
+.mock-toggle:hover {
+  background-color: #ddd;
+}
+
+.mock-toggle span {
+  padding-left: 1ch;
+}
+
+.graph-toggle input+div+img {
+  position: absolute;
+  top: 75px;
+  right: -150px;
+  background-color: white;
+  color: black;
+  display: none;
+  width: 300px;
+  height: 50px;
+}
+
+.graph-toggle input:checked+div+img {
+  border: 1px solid red;
+  display: flex;
+}
