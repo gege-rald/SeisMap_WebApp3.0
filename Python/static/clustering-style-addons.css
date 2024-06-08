@@ -29,47 +29,69 @@
   display: flex;
 }
 
-.dropdowns{
-  width: 400px;
+.dropdowns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 2ch;
   background: #051622;
   border-radius: 10px;
   padding: 20px 25px 40px;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
 }
 
-.clustering-input label{
-  flex: 1;
+.dropdowns label {
+  display: flex;
+  flex-direction: column;
+  gap: 1ch;
+  margin: 0;
+  padding: 0;
 }
+
+.clustering-input {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dropdowns label header {
+  text-align: center;
+}
+
+.clusters-input header {
+  line-height: 1.3;
+}
+
 
 label.clusters-input,
 label.clustering-input {
   /* flex: 1; */
-  padding: 10px 15px 20px;
-  width: 150px;
-  display: flex; /* Enable flexbox layout */
-  align-items: center; /* Vertically align elements within labels */
-  margin-right: 10px; /* Add spacing between labels (optional) */
+  display: flex;
+  /* Enable flexbox layout */
+  align-items: center;
+  justify-content: center;
+  /* Vertically align elements within labels */
 }
 
 .clusters-input input,
 .clustering-input select {
-  font-size: 15px;
+  font-size: 19px;
   text-align: center;
-  padding: 0.5ch 1ch;
   margin: 0;
+  padding: 0.5ch 1ch;
   -moz-appearance: initial;
   /* flex: 1; */
 }
 
 .clusters-input input {
-  width: 80px;
+  width: 100px;
   /* flex: 1; */
 }
 
 .clustering-input select {
-  width: 150px;
+  width: 125px;
   appearance: menulist;
-  flex: 1;
 }
 
 dialog:modal {
@@ -77,10 +99,13 @@ dialog:modal {
   max-height: 100%;
 }
 
-
-
 dialog#dataset-updater-popup,
 dialog#paste-interface-popup {
+  display: none;
+}
+
+dialog#dataset-updater-popup[open],
+dialog#paste-interface-popup[open] {
   display: grid;
   place-content: center;
   grid-auto-flow: row;
@@ -90,8 +115,11 @@ dialog#paste-interface-popup {
   border: none;
 }
 
-#dataset-updater-popup {
-  padding-top: 5rem;
+.dataset-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding-top: 10rem;
   padding-bottom: 3rem;
 }
 
@@ -110,6 +138,10 @@ th {
 
 td {
   padding: 0.5em 2em;
+}
+
+td input[type="number"] {
+  width: 75px;
 }
 
 .add-row-cell {
@@ -146,4 +178,10 @@ td {
   border: 5px solid black;
   border-radius: 1ch;
   background: white;
+}
+
+input[type="number"] {
+  border-radius: 5px;
+  border: 1px solid #999;
+  padding: 0.5ch 1ch;
 }

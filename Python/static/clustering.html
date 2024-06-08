@@ -19,23 +19,22 @@
     <div id="form-container">
       <h2>Cluster</h2>
       <div class="dropdowns">
-      <label for="clustering-algorithm" class="clustering-input">
-        <header>
-          <h3>Algorithm</h3>
-        </header>
-        <select name="clustering-algorithm" id="clustering-algorithm">
-          <option value="dbscan">DBSCAN</option>
-          <option value="minibatch-kmeans">Mini Batch K-means</option>
-        </select>
-      </label>
+        <label for="clustering-algorithm" class="clustering-input">
+          <header>
+            <h3>Algorithm</h3>
+          </header>
+          <select name="clustering-algorithm" id="clustering-algorithm">
+            <option value="dbscan">DBSCAN</option>
+            <option value="minibatch-kmeans">Mini Batch K-means</option>
+          </select>
+        </label>
 
-      <label for="clusters" class="clusters-input">
-        <header>
-          <h3>Labeled Clusters</h3>
-        </header>
-        <input type="number" id="clusters" name="clusters" min="3" max="50" value="3" />
-      </label>
-
+        <label for="clusters" class="clusters-input">
+          <header>
+            <h3>Labeled Clusters</h3>
+          </header>
+          <input type="number" id="clusters" name="clusters" min="3" max="50" value="3" disabled />
+        </label>
       </div>
 
       <div class="wrapper">
