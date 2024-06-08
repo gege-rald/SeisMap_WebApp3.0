@@ -17,6 +17,14 @@
   font-size: 2.25rem;
 }
 
+.prediction-month {
+  width: 100%;
+}
+
+.prediction-month h2 {
+  text-align: center;
+}
+
 .button-wrapper.row-flow {
   display: flex;
   flex-direction: row;
@@ -65,10 +73,16 @@ label.forecast-algorithm {
 }
 
 /* idea from: https://codepen.io/erikterwan/pen/EVzeRP */
-.toggle-wrapper {
+.toggle-wrapper,
+.start-date-wrapper {
   display: grid;
   place-content: center;
   width: 100%;
+}
+
+.start-date-wrapper label {
+  display: flex;
+  gap: 1em;
 }
 
 .graph-toggle {

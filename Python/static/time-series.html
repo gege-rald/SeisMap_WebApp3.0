@@ -20,6 +20,10 @@
       </header>
 
       <main class="content-wrapper">
+        <header class="prediction-month">
+          <h2>January</h2>
+        </header>
+
         <table id="forecast-table">
           <tr>
             <th>1</th>
@@ -75,6 +79,16 @@
             <td class="forecast-data">0.0</td>
           </tr>
         </table>
+
+        <div class="start-date-wrapper">
+          <label for="prediction-start-date">
+            <header>
+              <h2>Date starting:</h2>
+            </header>
+
+            <input type="date" id="prediction-start-date" value="2017-01-01" min="2017-01-01" max="2023-12-16" />
+          </label>
+        </div>
 
         <div class="legend-selection-wrapper">
           <label for="forecast-algorithm" class="forecast-algorithm">
