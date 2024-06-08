@@ -1,3 +1,4 @@
+.content-wrapper,
 #forecast-container {
   display: flex;
   gap: 2rem;
@@ -6,6 +7,14 @@
   height: 700px;
   padding: 3rem;
   color: white;
+}
+
+.content-wrapper {
+  padding: 3rem 0;
+}
+
+#forecast-container h1 {
+  font-size: 2.25rem;
 }
 
 .button-wrapper.row-flow {
@@ -53,4 +62,57 @@ label.forecast-algorithm {
   display: flex;
   flex-direction: column;
   gap: 1ch;
+}
+
+/* idea from: https://codepen.io/erikterwan/pen/EVzeRP */
+.toggle-wrapper {
+  display: grid;
+  place-content: center;
+  width: 100%;
+}
+
+.graph-toggle {
+  position: relative;
+  overflow: visible;
+}
+
+.graph-toggle input {
+  position: absolute;
+  opacity: 0;
+  z-index: 2;
+}
+
+.graph-toggle .mock-toggle {
+  text-align: right;
+  position: absolute;
+  width: 150px;
+  padding: 1rem;
+  border: 1px solid gray;
+  border-radius: 7px;
+  color: black;
+  background-color: white;
+}
+
+.mock-toggle:hover {
+  background-color: #ddd;
+}
+
+.mock-toggle span {
+  padding-left: 1ch;
+}
+
+.graph-toggle input+div+img {
+  position: absolute;
+  top: 75px;
+  right: -150px;
+  background-color: white;
+  color: black;
+  display: none;
+  width: 300px;
+  height: 50px;
+}
+
+.graph-toggle input:checked+div+img {
+  border: 1px solid red;
+  display: flex;
 }
