@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
   predict_input.addEventListener('input', update_forecast_dates);
 
   update_forecast_dates({ target: predict_input });
+
+  iframe_send_notification({ title: "Hello world", message: "How are you doing today?" });
+  iframe_send_notification({ title: "Hello world 2", message: "Is the sequel good?" });
 });
 
 function update_forecast_dates(event) {
@@ -73,4 +76,3 @@ function get_forecast_dates(start_date) {
 
   return { months, days, possible_second_month_index };
 }
-
