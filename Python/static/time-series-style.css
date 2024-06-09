@@ -22,12 +22,24 @@
 }
 
 .forecast-months th {
+  max-width: 3em;
   background-color: transparent;
 }
 
 #forecast-table .forecast-months h2 {
   text-align: center;
   color: white;
+}
+
+#forecast-table .forecast-months th.first,
+#forecast-table .forecast-months th.second {
+  padding: 1rem 0;
+}
+
+.forecast-months h2 {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: '.';
 }
 
 .forecast-months .second.hidden {
