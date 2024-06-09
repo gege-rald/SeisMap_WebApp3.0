@@ -21,12 +21,17 @@
   font-size: 2.25rem;
 }
 
-.prediction-month {
-  width: 100%;
+.forecast-months th {
+  background-color: transparent;
 }
 
-.prediction-month h2 {
+#forecast-table .forecast-months h2 {
   text-align: center;
+  color: white;
+}
+
+.forecast-months .second.hidden {
+  display: none;
 }
 
 .button-wrapper.row-flow {
