@@ -70,10 +70,12 @@ function new_timer() {
         second_val += 1;
         if (second_val >= seconds_in_minute) {
             minute_val += 1;
+            second_val = 0;
         }
 
         if (minute_val >= seconds_in_minute) {
             hour_val += 1;
+            minute_val = 0;
         }
 
         hour_el.innerText = pad_number(hour_val);
