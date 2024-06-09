@@ -20,8 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   update_forecast_dates({ target: predict_input });
 
-  iframe_send_notification({ title: "Hello world", message: "How are you doing today?" });
-  iframe_send_notification({ title: "Hello world 2", message: "Is the sequel good?" });
+  iframe_send_notification({ title: "Model updating...", timer: true });
 });
 
 function update_forecast_dates(event) {
