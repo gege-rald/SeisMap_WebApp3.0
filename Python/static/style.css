@@ -1,16 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
 * {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
     scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif
 }
 
-body{
+body {
     background: #051622;
     color: #ededed;
+    position: relative;
 }
 
 .header {
@@ -26,7 +27,7 @@ body{
     z-index: 100;
 }
 
-.logo{
+.logo {
     position: relative;
     font-size: 25px;
     color: #ededed;
@@ -34,8 +35,8 @@ body{
     font-weight: 600;
 }
 
-.logo::before{
-    content:'';
+.logo::before {
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
@@ -46,7 +47,7 @@ body{
     animation-delay: .3s;
 }
 
-.navbar a{
+.navbar a {
     font-size: 18px;
     color: #ededed;
     text-decoration: none;
@@ -60,7 +61,7 @@ body{
     color: #00abf0;
 }
 
-.main-section{
+.main-section {
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -71,15 +72,15 @@ body{
     font-weight: 700;
 }
 
-.main-section:nth-child(odd){
+.main-section:nth-child(odd) {
     background: #051622;
 }
 
-.main-section:nth-child(even){
-    background:  #081B29;
+.main-section:nth-child(even) {
+    background: #081B29;
 }
 
-.explore{
+.explore {
     height: 100vh;
     background: url('modified_seismap.svg') no-repeat;
     background-size: 350px 350px;
@@ -90,19 +91,19 @@ body{
 }
 
 
-.explore-content{
+.explore-content {
     max-width: 600px;
 }
 
-.explore-content h1{
+.explore-content h1 {
     position: relative;
     font-size: 56px;
     font-weight: 700;
     line-height: 1.2;
 }
 
-.explore-content h1::before{
-    content:'';
+.explore-content h1::before {
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
@@ -113,14 +114,14 @@ body{
     animation-delay: 1s;
 }
 
-.explore-content h3{
-    font-size:32px;
-    font-weight:700;
+.explore-content h3 {
+    font-size: 32px;
+    font-weight: 700;
     color: #00abf0;
 }
 
-.explore-content h3::before{
-    content:'';
+.explore-content h3::before {
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
@@ -131,14 +132,14 @@ body{
     animation-delay: 1.3s;
 }
 
-.explore-content p{
+.explore-content p {
     position: relative;
     font-size: 16px;
     margin: 20px 0 40px;
 }
 
-.explore-content p::before{
-    content:'';
+.explore-content p::before {
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
@@ -157,8 +158,8 @@ body{
     height: 55px;
 }
 
-.explore-content .btn-box::before{
-    content:'';
+.explore-content .btn-box::before {
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
@@ -170,7 +171,7 @@ body{
     z-index: 2;
 }
 
-.btn-box a{
+.btn-box a {
     position: relative;
     display: inline-flex;
     justify-content: center;
@@ -185,42 +186,42 @@ body{
     text-decoration: none;
     font-weight: 600;
     letter-spacing: 1px;
-    z-index:1;
+    z-index: 1;
     overflow: hidden;
     transition: .5s;
 }
 
-.btn-box a:hover{
+.btn-box a:hover {
     color: #00abf0;
 }
 
-.btn-box a:nth-child(2){
+.btn-box a:nth-child(2) {
     background: transparent;
     color: #00abf0;
 }
 
-.btn-box a:nth-child(3){
+.btn-box a:nth-child(3) {
     background: transparent;
     color: #00abf0;
 }
 
-.btn-box a:nth-child(2):hover{
+.btn-box a:nth-child(2):hover {
     color: #081b29;
 }
 
-.btn-box a:nth-child(3):hover{
+.btn-box a:nth-child(3):hover {
     color: #081b29;
 }
 
-.btn-box a:nth-child(2)::before{
-    background:#00abf0;
+.btn-box a:nth-child(2)::before {
+    background: #00abf0;
 }
 
-.btn-box a:nth-child(3)::before{
-    background:#00abf0;
+.btn-box a:nth-child(3)::before {
+    background: #00abf0;
 }
 
-.btn-box a::before{
+.btn-box a::before {
     content: '';
     position: absolute;
     top: 0;
@@ -228,37 +229,37 @@ body{
     width: 0;
     height: 100%;
     /* background: red; */
-    background: #081b29; 
+    background: #081b29;
     z-index: -1;
     transition: .5s;
 }
 
-.btn-box a:hover::before{
+.btn-box a:hover::before {
     width: 100%
 }
 
-.home-imgHover{
+.home-imgHover {
     position: absolute;
-    top:0;
+    top: 0;
     right: 30px;
     width: 500px;
     height: 100%;
     background: transparent;
     transition: 3s;
     animation: manipActiveHolder .1s forwars;
-    animation-delay:2s;
-    pointer-events:none;
+    animation-delay: 2s;
+    pointer-events: none;
 }
 
-.home-imgHover:hover{
+.home-imgHover:hover {
     background: #081b29;
     opacity: .8;
 }
 
-.home-imgHover::after{
+.home-imgHover::after {
     content: '';
     position: absolute;
-    top:0;
+    top: 0;
     right: 0;
     width: 120%;
     height: 100%;
@@ -268,17 +269,48 @@ body{
     z-index: 2;
 }
 
+.notification-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin: 3em;
+    z-index: 5;
+}
+
+.notification-wrapper .notification {
+    position: relative;
+    width: 300px;
+    padding: 1rem;
+    border: 1px solid gray;
+    border-radius: 1ch;
+    background-color: white;
+    color: black;
+}
+
+.notification .close-notif-button {
+    position: absolute;
+    top: 0;
+    border-radius: 1ch;
+    right: 0;
+    width: 1.5em;
+    aspect-ratio: 1;
+    margin: 1ch;
+    border: none;
+}
 
 /* KEYFRAMES ANIMATION */
 
-@keyframes showRight{
-    100%{
-        width:0;
+@keyframes showRight {
+    100% {
+        width: 0;
     }
 }
 
-@keyframes manipActiveHolder{
-    100%{
+@keyframes manipActiveHolder {
+    100% {
         pointer-events: auto;
     }
 }

@@ -138,7 +138,7 @@ function increment_date(date_string, days) {
   const date = new Date(Date.parse(date_string));
   date.setDate(date.getDate() + days);
 
-  return format_date(date);
+  return date;
 }
 
 function format_date(date_obj) {
@@ -187,14 +187,14 @@ document.addEventListener("DOMContentLoaded", () => {
   start_date_picker.addEventListener("input", () => {
     start_date_picker.value = constraint_date(start_date_picker);
 
-    const incremented_date = increment_date(start_date_picker.value, 1);
+    const incremented_date = format_date(increment_date(start_date_picker.value, 1));
     end_date_picker.min = incremented_date;
   });
 
   end_date_picker.addEventListener("input", () => {
     end_date_picker.value = constraint_date(end_date_picker);
 
-    const incremented_date = increment_date(end_date_picker.value, -1);
+    const incremented_date = format_date(increment_date(end_date_picker.value, -1));
     start_date_picker.max = incremented_date;
   });
 });

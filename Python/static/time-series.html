@@ -20,64 +20,75 @@
       </header>
 
       <main class="content-wrapper">
-        <header class="prediction-month">
-          <h2>January</h2>
-        </header>
-
         <table id="forecast-table">
-          <tr>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-            <th>4</th>
-            <th>5</th>
-            <th>6</th>
-            <th>7</th>
-            <th>8</th>
-            <th>9</th>
-            <th>10</th>
-            <th>11</th>
-            <th>12</th>
-            <th>13</th>
-            <th>14</th>
-            <th>15</th>
-          </tr>
+          <!-- TODO: differentiate month days through color -->
+          <thead>
+            <tr class="forecast-months">
+              <th class="first">
+                <h2>January</h2>
+              </th>
 
-          <tr>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-            <td class="actual-data">0.0</td>
-          </tr>
+              <th class="second">
+                <h2>February</h2>
+              </th>
+            </tr>
+          </thead>
 
-          <tr>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-            <td class="forecast-data">0.0</td>
-          </tr>
+          <tbody>
+            <tr class="forecast-dates">
+              <th>1</th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>5</th>
+              <th>6</th>
+              <th>7</th>
+              <th>8</th>
+              <th>9</th>
+              <th>10</th>
+              <th>11</th>
+              <th>12</th>
+              <th>13</th>
+              <th>14</th>
+              <th>15</th>
+            </tr>
+
+            <tr>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+              <td class="actual-data">0.0</td>
+            </tr>
+
+            <tr>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+              <td class="forecast-data">0.0</td>
+            </tr>
+          </tbody>
         </table>
 
         <div class="start-date-wrapper">
@@ -218,7 +229,8 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="explore-script.js"></script>
-
+  <script src="time-series-script.js"></script>
+  <script src="send-notification.js"></script>
 </body>
 
 </html>
