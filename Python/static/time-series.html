@@ -218,7 +218,9 @@
 
       <div class="button-wrapper row-flow">
         <button class="get-started-button" id="forecast-button">Forecast</button>
-        <button class="update-button">Update</button>
+        <button class="dataset-update-button" onclick="document.querySelector('#dataset-updater-popup').showModal()">
+          Update
+        </button>
       </div>
 
     </div>
@@ -226,9 +228,78 @@
 
   </div>
 
+  <dialog id="dataset-updater-popup">
+    <div class="dataset-wrapper">
+      <header class="dataset-popup-header">
+        <h1>Dataset update</h1>
+      </header>
+
+      <table id="dummy-table">
+        <tr>
+          <th>Date - Time (Philippine Time)</th>
+          <th>Latitude (ºN)</th>
+          <th>Longitude (ºE)</th>
+          <th>Depth (km)</th>
+          <th>Magnitude</th>
+          <th>Location</th>
+        </tr>
+
+        <tr>
+          <td>thing</td>
+          <td>thing</td>
+          <td>thing</td>
+          <td>thing</td>
+          <td>thing</td>
+          <td>thing</td>
+        </tr>
+
+        <tr>
+          <td colspan="6" class="add-row-cell">
+            <button class="add-row-button">Add row</button>
+          </td>
+        </tr>
+      </table>
+
+      <ul class="option-buttons dataset-buttons">
+        <li><button class="add-to-dataset-button">Add to dataset</button></li>
+        <li><button onclick="document.querySelector('#dataset-updater-popup').close();">Cancel</button></li>
+      </ul>
+    </div>
+  </dialog>
+
+  <dialog id="paste-interface-popup">
+    <div class="dialog-wrapper">
+      <div class="paste-notif">
+        <header>
+          <h2>Pasting values</h2>
+        </header>
+        <p>
+          It seems that you pasted some values for updating the dataset. What would you want to do?
+        </p>
+      </div>
+
+      <div class="paste-preview">
+        <header>
+          <h3>Preview </h3>
+        </header>
+        <p id="pasted-value-preview">
+          Lorem ipsum dolor sit amet, qui minim labore adipisicing minim...
+        </p>
+      </div>
+
+      <ul class="option-buttons">
+        <li><button onclick="add_pasted_values({override: false});">Append the update table</button></li>
+        <li><button onclick="add_pasted_values({override: true});">Overwrite the update table</button></li>
+        <li><button onclick="document.querySelector('#paste-interface-popup').close();">Cancel</button></li>
+      </ul>
+    </div>
+  </dialog>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="explore-script.js"></script>
+  <script src="clustering-script.js"></script>
+  <script src="dsl-utils.js"></script>
   <script src="time-series-script.js"></script>
   <script src="send-notification.js"></script>
 </body>
