@@ -108,6 +108,14 @@ function parse_pasted_value(string) {
   return parsed_values;
 }
 
+function clear_dataset_table() {
+  data_rows = [];
+  const new_table = generate_table(data_rows);
+
+  replace_node(dataset_table_element, new_table);
+  dataset_table_element = new_table;
+}
+
 let data_rows = [];
 function generate_table(rows) {
   const Header = children(document.createElement('tr'),
@@ -157,6 +165,7 @@ function generate_table(rows) {
     Header,
     table_children,
   );
+  Table.setAttribute('id', 'dataset-table');
 
   return Table;
 }
@@ -270,61 +279,10 @@ document.addEventListener("DOMContentLoaded", () => {
     
   replace_node(dummy_table, Table);
   dataset_table_element = Table;
-
-  const clustering_select = document.querySelector('#clustering-algorithm');
-  const clusters_input = document.querySelector('#clusters');
-
-  clustering_select.addEventListener('input', () => {
-    if (clustering_select.value == "dbscan") {
-      clusters_input.disabled = true;
-    } else {
-      clusters_input.disabled = false;
-    }
-  });
 });
 
 
 
-//sending of data to the flask server 
-
-document.getElementById('submit-button').addEventListener('click', function() {
-  const algorithm = document.getElementById('clustering-algorithm').value;
-  const clusters = document.getElementById('clusters').value;
-  const magnitudeMin = document.querySelector('.input-min').value;
-  const magnitudeMax = document.querySelector('.input-max').value;
-  const depthMin = document.querySelector('.input-min-depth').value;
-  const depthMax = document.querySelector('.input-max-depth').value;
-  const startDate = document.getElementById('start-date').value;
-  const endDate = document.getElementById('end-date').value;
-
-  const data = {
-      algorithm: algorithm,
-      clusters: clusters,
-      magnitudeRange: { min: magnitudeMin, max: magnitudeMax },
-      depthRange: { min: depthMin, max: depthMax },
-      dateRange: { start: startDate, end: endDate }
-  };
-
-  fetch('/perform-clustering', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-  })
-  .then(response => {
-      if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-  })
-  .then(data => {
-      console.log('Success:', data);
-  })
-  .catch((error) => {
-      console.error('Error:', error);
-  });
-});
 
 
 
@@ -332,7 +290,7 @@ document.getElementById('submit-button').addEventListener('click', function() {
 
 // Function to update dataset   
 function add_to_dataset(options) {
-  const table = document.querySelector('#dataset-updater-popup #dummy-table');
+  const table = document.querySelector('#dataset-updater-popup #dataset-table');
   if (!table) {
     console.error('Table with ID "dummy-table" not found in the DOM');
     return;
@@ -360,6 +318,10 @@ function add_to_dataset(options) {
   .then(result => {
     if (result.status === 'success') {
       alert('Dataset updated successfully!');
+      // you can add the iframe_send_notification function here 
+      // example:
+      // iframe_send_notification({ title: "Dataset updated successfully", message: "The dataset now has more data."})
+      clear_dataset_table();
     } else {
       alert('Error updating dataset: ' + result.message);
     }
