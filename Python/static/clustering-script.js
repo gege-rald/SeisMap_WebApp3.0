@@ -108,6 +108,14 @@ function parse_pasted_value(string) {
   return parsed_values;
 }
 
+function clear_dataset_table() {
+  data_rows = [];
+  const new_table = generate_table(data_rows);
+
+  replace_node(dataset_table_element, new_table);
+  dataset_table_element = new_table;
+}
+
 let data_rows = [];
 function generate_table(rows) {
   const Header = children(document.createElement('tr'),
@@ -313,6 +321,7 @@ function add_to_dataset(options) {
       // you can add the iframe_send_notification function here 
       // example:
       // iframe_send_notification({ title: "Dataset updated successfully", message: "The dataset now has more data."})
+      clear_dataset_table();
     } else {
       alert('Error updating dataset: ' + result.message);
     }
