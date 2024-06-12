@@ -330,7 +330,7 @@ document.getElementById('submit-button').addEventListener('click', function() {
 
 
 
-// Function to add to dataset
+// Function to update dataset   
 function add_to_dataset(options) {
   const table = document.querySelector('#dataset-updater-popup #dummy-table');
   if (!table) {

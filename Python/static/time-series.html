@@ -56,7 +56,7 @@ time-series.html
               <th>15</th>
             </tr>
 
-            <tr>
+            <tr id="actual-data-row">
               <td class="actual-data">0.0</td>
               <td class="actual-data">0.0</td>
               <td class="actual-data">0.0</td>
@@ -74,7 +74,7 @@ time-series.html
               <td class="actual-data">0.0</td>
             </tr>
 
-            <tr>
+            <tr id="forecast-data-row">
               <td class="forecast-data">0.0</td>
               <td class="forecast-data">0.0</td>
               <td class="forecast-data">0.0</td>
@@ -139,9 +139,9 @@ time-series.html
         <div class="toggle-wrapper">
           <label for="graph-toggle" class="graph-toggle">
             <input type="checkbox" id="graph-toggle" />
-            <div class="mock-toggle">See more <span>⮟</span></div>
+            <div class="mock-toggle" >See more <span>⮟</span></div>
 
-            <img src="" alt="A graph showing earthquake trends." class="graph" />
+            <img src="" alt="A graph showing earthquake trends." class="graph" id="forecast-chart-container"/>
           </label>
         </div>
 

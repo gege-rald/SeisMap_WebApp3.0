@@ -87,9 +87,12 @@ def forecast_earthquakes_ARIMA(magnitude_min, magnitude_max, depth_min, depth_ma
     plt.text(0.01, -0.15, month_year, transform=ax.transAxes, fontsize=10, ha='left', color='gray')  # Place text at bottom left
 
     plt.tight_layout()  # Adjust layout to prevent clipping of labels
-    plt.show()
+    plot_file_path = 'Python/static/forecast_plot.png'
+    plt.savefig(plot_file_path)
+    plt.close()
 
-    return json_output
+    return json_output, plot_file_path
+
 
 # # Example usage
 # result = forecast_earthquakes_ARIMA(3.0, 7.0, 0, 70, '2023-11-01', 'Python/static/final_earthquake_catalogue_v2.db', 'earthquake_database')

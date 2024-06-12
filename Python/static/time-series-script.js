@@ -102,10 +102,9 @@ function get_forecast_dates(start_date) {
 
 
 //sending of data to the flask server 
-
-document.getElementById('forecast-button').addEventListener('click', function() {
-  const algorithm = document.getElementById('forecast-algorithm').value;
-  // const clusters = document.getElementById('clusters').value;
+document.getElementById('submit-button').addEventListener('click', function() {
+  const algorithm = document.getElementById('clustering-algorithm').value;
+  const clusters = document.getElementById('clusters').value;
   const magnitudeMin = document.querySelector('.input-min').value;
   const magnitudeMax = document.querySelector('.input-max').value;
   const depthMin = document.querySelector('.input-min-depth').value;
@@ -116,7 +115,7 @@ document.getElementById('forecast-button').addEventListener('click', function() 
 
   const data = {
       algorithm: algorithm,
-      // clusters: clusters,
+      clusters: clusters,
       magnitudeRange: { min: magnitudeMin, max: magnitudeMax },
       depthRange: { min: depthMin, max: depthMax },
       dateRange: { start: startDate, end: endDate },
@@ -137,7 +136,32 @@ document.getElementById('forecast-button').addEventListener('click', function() 
       return response.json();
   })
   .then(data => {
-      console.log('Success:', data);
+      if (data.status === 'success') {
+          console.log('Success:', data);
+          const forecastResults = data.forecast_results;
+          const plotFilePath = data.plot_file_path;
+
+          const actualDataRow = document.getElementById('actual-data-row');
+          const forecastDataRow = document.getElementById('forecast-data-row');
+
+          actualDataRow.innerHTML = '';
+          forecastDataRow.innerHTML = '';
+
+          forecastResults.forEach(result => {
+              const actualCell = document.createElement('td');
+              actualCell.textContent = result.actual_value;
+              actualDataRow.appendChild(actualCell);
+
+              const forecastCell = document.createElement('td');
+              forecastCell.textContent = result.predicted_value;
+              forecastDataRow.appendChild(forecastCell);
+          });
+
+          const chartContainer = document.getElementById('forecast-chart-container');
+          chartContainer.innerHTML = `<img src="${plotFilePath}" alt="Forecast Chart">`;
+      } else {
+          console.error(data.message);
+      }
   })
   .catch((error) => {
       console.error('Error:', error);
