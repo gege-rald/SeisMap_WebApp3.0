@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 from clustering_dbscan import prfrm_clustering
+from time_series_ARIMA import forecast_earthquakes_ARIMA
 
 app = Flask(__name__, template_folder='HTML', static_folder='static')
 
@@ -168,6 +169,7 @@ def perform_clustering():
 
         id, algorithm, magnitude_min, magnitude_max, depth_min, depth_max, start_date, end_date, forecast_date = last_entry
         filtered_data = get_earthquake_data(magnitude_min, magnitude_max, depth_min, depth_max, start_date, end_date)
+        result=forecast_earthquakes_ARIMA(magnitude_min, magnitude_max, depth_min, depth_max, forecast_date, sqlite_file, table_name)
         print(algorithm)
         print("pass here")
         print("pass 2")
@@ -177,7 +179,7 @@ def perform_clustering():
             'status': 'success',
             'message': 'Time series performed successfully'
         }
-        return jsonify(response)
+        return jsonify(result)
     
     except Exception as e:
         logging.error(f"Error during clustering: {str(e)}")
