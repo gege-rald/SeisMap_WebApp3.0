@@ -194,7 +194,8 @@ def convert_to_millis(date_str):
         dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
     except ValueError:
         try:
-            dt = datetime.strptime(date_str, "%d %b %Y - %I:%M %p")
+            # from dataset update date time format
+            dt = datetime.strptime(date_str, "%Y-%m-%dT%H:%M")
         except ValueError:
             print(f"Error parsing date: {date_str}")
             return None
@@ -215,7 +216,13 @@ def update_dataset():
             cursor.execute('DELETE FROM earthquake_database')
 
         for row in data:
-            date_time, latitude, longitude, depth, magnitude, location = row
+            date_time = row['date_time']
+            latitude = row['latitude']
+            longitude = row['longitude']
+            depth = row['depth']
+            magnitude = row['magnitude']
+            location = row['location']
+
             millis = convert_to_millis(date_time)
             cursor.execute('''
                 INSERT INTO earthquake_database (Date_Time, Latitude, Longitude, Depth, Mag, Location, Millis)
