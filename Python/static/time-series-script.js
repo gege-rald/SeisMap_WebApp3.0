@@ -79,69 +79,70 @@ function get_forecast_dates(start_date) {
 
 
 // //sending of dataset update
-document.addEventListener('click', function(event) {
-  // Check if the clicked element is the button that triggers the dataset update
-  if (event.target && event.target.classList.contains('add-to-dataset-button')) {
-    // Nested event listener for the "Add row" button
-    add_to_dataset({ override: false });
-    const addRowButton = event.target.closest('.wrapper').querySelector('.add-row-button');
-    if (addRowButton) {
-      addRowButton.addEventListener('click', function() {
-        // Call the add_to_dataset function when the "Add row" button is clicked
-        add_to_dataset({ override: false });
-      });
-    } else {
-      console.error('Add row button not found');
-    }
-  }
+// Attach event listener to the dialog container after DOM content is fully loaded
+
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   const dialogContainer = document.getElementById('dataset-updater-popup');
+//   if (dialogContainer) {
+//     dialogContainer.addEventListener('click', (event) => {
+//       // Check if the clicked element is the "Add to dataset" button
+//       if (event.target && event.target.classList.contains('add-to-dataset-button')) {
+//         add_to_dataset({ override: false });
+//       }
+//     });
+//   } else {
+//     console.error('Dialog container not found in the DOM');
+//   }
+// });
+
+
+
+
+
+
+//sending of data to the flask server 
+
+document.getElementById('forecast-button').addEventListener('click', function() {
+  const algorithm = document.getElementById('forecast-algorithm').value;
+  // const clusters = document.getElementById('clusters').value;
+  const magnitudeMin = document.querySelector('.input-min').value;
+  const magnitudeMax = document.querySelector('.input-max').value;
+  const depthMin = document.querySelector('.input-min-depth').value;
+  const depthMax = document.querySelector('.input-max-depth').value;
+  const startDate = document.getElementById('start-date').value;
+  const endDate = document.getElementById('end-date').value;
+  const forecastDate = document.getElementById('prediction-start-date').value;
+
+  const data = {
+      algorithm: algorithm,
+      // clusters: clusters,
+      magnitudeRange: { min: magnitudeMin, max: magnitudeMax },
+      depthRange: { min: depthMin, max: depthMax },
+      dateRange: { start: startDate, end: endDate },
+      forecastDate: forecastDate
+  };
+
+  fetch('/perform-clustering', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+  })
+  .then(data => {
+      console.log('Success:', data);
+  })
+  .catch((error) => {
+      console.error('Error:', error);
+  });
 });
 
-document.addEventListener("paste", event => {
-  const pasted_value = event.clipboardData.getData("text");
-  show_paste_interface(pasted_value);
-
-  // Call the function to add pasted values to the dataset after the paste event
-  add_pasted_values({ override: false });
-});
 
 
-// Function to add to dataset
-function add_to_dataset(options) {
-  const table = document.getElementById('dummy-table');
-  console.log(table);
-  if (!table) {
-    console.error('Table with ID "dummy-table" not found in the DOM');
-    return;
-  }
-
-  const rows = table.querySelectorAll('tr:not(:first-child, :last-child)');
-
-  const data = [];
-
-  rows.forEach(row => {
-    const cells = row.querySelectorAll('td');
-    const rowData = [];
-    cells.forEach(cell => rowData.push(cell.textContent));
-    data.push(rowData);
-  });
-
-  fetch('/update-dataset', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ data, options }),
-  })
-  .then(response => response.json())
-  .then(result => {
-    if (result.status === 'success') {
-      alert('Dataset updated successfully!');
-    } else {
-      alert('Error updating dataset: ' + result.message);
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    alert('Error updating dataset');
-  });
-}

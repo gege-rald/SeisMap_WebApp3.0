@@ -246,6 +246,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const yes = confirm("Are you sure you want to add to the dataset?");
     if (yes) {
       const dataset_popup = document.querySelector('#dataset-updater-popup');
+      const options = {
+        // Example options, replace with your actual options
+        dataType: 'dynamic',
+        source: 'user',
+        method: 'append',
+        // Add more options as needed
+      };
+      add_to_dataset(options);
       dataset_popup.close();
     }
   });
@@ -263,6 +271,16 @@ document.addEventListener("DOMContentLoaded", () => {
   replace_node(dummy_table, Table);
   dataset_table_element = Table;
 
+  const clustering_select = document.querySelector('#clustering-algorithm');
+  const clusters_input = document.querySelector('#clusters');
+
+  clustering_select.addEventListener('input', () => {
+    if (clustering_select.value == "dbscan") {
+      clusters_input.disabled = true;
+    } else {
+      clusters_input.disabled = false;
+    }
+  });
 });
 
 
@@ -307,3 +325,47 @@ document.getElementById('submit-button').addEventListener('click', function() {
       console.error('Error:', error);
   });
 });
+
+
+
+
+
+// Function to add to dataset
+function add_to_dataset(options) {
+  const table = document.querySelector('#dataset-updater-popup #dummy-table');
+  if (!table) {
+    console.error('Table with ID "dummy-table" not found in the DOM');
+    return;
+  }
+
+  const rows = table.querySelectorAll('tr:not(:first-child, :last-child)');
+
+  const data = [];
+
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    const rowData = [];
+    cells.forEach(cell => rowData.push(cell.textContent));
+    data.push(rowData);
+  });
+
+  fetch('/update-dataset', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ data, options }),
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.status === 'success') {
+      alert('Dataset updated successfully!');
+    } else {
+      alert('Error updating dataset: ' + result.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error updating dataset');
+  });
+}
