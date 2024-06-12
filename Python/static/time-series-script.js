@@ -102,9 +102,8 @@ function get_forecast_dates(start_date) {
 
 
 //sending of data to the flask server 
-document.getElementById('submit-button').addEventListener('click', function() {
-  const algorithm = document.getElementById('clustering-algorithm').value;
-  const clusters = document.getElementById('clusters').value;
+document.getElementById('forecast-button').addEventListener('click', function() {
+  const algorithm = document.getElementById('forecast-algorithm').value;
   const magnitudeMin = document.querySelector('.input-min').value;
   const magnitudeMax = document.querySelector('.input-max').value;
   const depthMin = document.querySelector('.input-min-depth').value;
@@ -114,59 +113,86 @@ document.getElementById('submit-button').addEventListener('click', function() {
   const forecastDate = document.getElementById('prediction-start-date').value;
 
   const data = {
-      algorithm: algorithm,
-      clusters: clusters,
-      magnitudeRange: { min: magnitudeMin, max: magnitudeMax },
-      depthRange: { min: depthMin, max: depthMax },
-      dateRange: { start: startDate, end: endDate },
-      forecastDate: forecastDate
+    algorithm: algorithm,
+    magnitudeRange: { min: magnitudeMin, max: magnitudeMax },
+    depthRange: { min: depthMin, max: depthMax },
+    dateRange: { start: startDate, end: endDate },
+    forecastDate: forecastDate
   };
 
   fetch('/perform-clustering', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
   })
   .then(response => {
-      if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
   })
   .then(data => {
-      if (data.status === 'success') {
-          console.log('Success:', data);
-          const forecastResults = data.forecast_results;
-          const plotFilePath = data.plot_file_path;
+    console.log('Success:', data);
+    if (data.status === 'success') {
+      const forecastResults = data.forecast_results;
+      const plotFilePath = data.plot_file_path;
 
-          const actualDataRow = document.getElementById('actual-data-row');
-          const forecastDataRow = document.getElementById('forecast-data-row');
+      const actualDataRow = document.getElementById('actual-data-row');
+      const forecastDataRow = document.getElementById('forecast-data-row');
 
-          actualDataRow.innerHTML = '';
-          forecastDataRow.innerHTML = '';
+      // Clear existing content
+      actualDataRow.innerHTML = '';
+      forecastDataRow.innerHTML = '';
 
-          forecastResults.forEach(result => {
-              const actualCell = document.createElement('td');
-              actualCell.textContent = result.actual_value;
-              actualDataRow.appendChild(actualCell);
+      // Update actual data row
+      forecastResults.forEach(result => {
+        const actualCell = document.createElement('td');
+        actualCell.textContent = result.actual_value;
+        actualCell.classList.add('actual-data'); // Add class for styling
+        actualDataRow.appendChild(actualCell);
+      });
 
-              const forecastCell = document.createElement('td');
-              forecastCell.textContent = result.predicted_value;
-              forecastDataRow.appendChild(forecastCell);
-          });
+      // Update forecast data row
+      forecastResults.forEach(result => {
+        const forecastCell = document.createElement('td');
+        forecastCell.textContent = result.predicted_value;
+        forecastCell.classList.add('forecast-data'); // Add class for styling
+        forecastDataRow.appendChild(forecastCell);
+      });
 
-          const chartContainer = document.getElementById('forecast-chart-container');
-          chartContainer.innerHTML = `<img src="${plotFilePath}" alt="Forecast Chart">`;
+      const chartContainer = document.getElementById('forecast-chart-container');
+      const existingImage = chartContainer.querySelector('img');
+      if (existingImage) {
+        existingImage.src = plotFilePath + '?' + new Date().getTime(); // Force browser to reload image
       } else {
-          console.error(data.message);
+        const img = document.createElement('img');
+        img.src = plotFilePath;
+        img.alt = 'A graph showing earthquake trends.';
+        img.classList.add('graph');
+        img.style.width = '100%';
+        img.style.height = 'auto';
+        chartContainer.appendChild(img);
       }
+
+      // Ensure the container is initially hidden
+      chartContainer.style.display = 'none';
+    } else {
+      console.error(data.message);
+    }
   })
   .catch((error) => {
-      console.error('Error:', error);
+    console.error('Error:', error);
   });
 });
 
-
-
+// Toggle the display of the forecast-chart-container based on the checkbox state
+document.getElementById('graph-toggle').addEventListener('change', function() {
+  const chartContainer = document.getElementById('forecast-chart-container');
+  if (this.checked) {
+    chartContainer.style.display = 'block';
+  } else {
+    chartContainer.style.display = 'none';
+  }
+});

@@ -107,6 +107,6 @@ def forecast_earthquakes_sarima(magnitude_min, magnitude_max, depth_min, depth_m
 
     return json_output
 
-# Example usage
-result = forecast_earthquakes_sarima(3.0, 7.0, 0, 70, '2020-01-01', '2024-01-01', 'Python/static/final_earthquake_catalogue_v2.db', 'earthquake_database')
-print(result)
+# # Example usage
+# result = forecast_earthquakes_sarima(3.0, 7.0, 0, 70, '2020-01-01', '2024-01-01', 'Python/static/final_earthquake_catalogue_v2.db', 'earthquake_database')
+# print(result)

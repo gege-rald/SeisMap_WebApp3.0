@@ -1,15 +1,26 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import logging
 import sqlite3
 from datetime import datetime
+from threading import Lock
 from sklearn.cluster import DBSCAN
 import pandas as pd
 import numpy as np
-from datetime import datetime
 from clustering_dbscan import prfrm_clustering
 from time_series_ARIMA import forecast_earthquakes_ARIMA
+import os
 
 app = Flask(__name__, template_folder='HTML', static_folder='static')
+
+# Set Matplotlib to use the 'Agg' backend
+import matplotlib
+matplotlib.use('Agg')
+
+# Lock for serializing access to the plotting code
+plot_lock = Lock()
+
+# Ensure logging is set up
+logging.basicConfig(level=logging.DEBUG)
 
 def init_db():
     conn = sqlite3.connect('Python/static/final_earthquake_catalogue_v2.db')
@@ -44,14 +55,21 @@ def get_last_entry():
 def convert_to_millis(date_str):
     try:
         dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
+        # sprint("pass on first try")
     except ValueError:
         try:
             dt = datetime.strptime(date_str, "%d %b %Y - %I:%M %p")
+            # print("pass on second try")
         except ValueError:
-            print(f"Error parsing date: {date_str}")
-            return None
-
-    return int(dt.timestamp() * 1000)
+            try:
+                dt = datetime.strptime(date_str, "%Y-%m-%dT%H:%M")
+                # print("pass on third try")
+            except ValueError:
+                print(f"Error parsing date: {date_str}")
+                return None
+    
+    millis = int(dt.timestamp() * 1000)
+    return millis
 
 def update_millis(db_file):
     conn = sqlite3.connect(db_file)
@@ -141,7 +159,7 @@ def perform_clustering():
         magnitude_range = data.get('magnitudeRange')
         depth_range = data.get('depthRange')
         date_range = data.get('dateRange')
-        forecast_range = data.get('forecastDate')
+        forecast_date = data.get('forecastDate')
 
         logging.debug(data)
         logging.debug(f"Algorithm: {algorithm}")
@@ -151,35 +169,40 @@ def perform_clustering():
 
         start_date = datetime.strptime(date_range['start'], '%Y-%m-%d')
         end_date = datetime.strptime(date_range['end'], '%Y-%m-%d')
-        forecast_millis = datetime.strptime(forecast_range, '%Y-%m-%d')  # Corrected line
+        forecast_millis = datetime.strptime(forecast_date, '%Y-%m-%d')  # Corrected line
 
         conn = sqlite3.connect('Python/static/final_earthquake_catalogue_v2.db')
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO earthquake_data (algorithm, magnitude_min, magnitude_max, depth_min, depth_max, start_date, end_date, forecast_date)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (algorithm, magnitude_range['min'], magnitude_range['max'], depth_range['min'], depth_range['max'], date_range['start'], date_range['end'], forecast_range))
+        ''', (algorithm, magnitude_range['min'], magnitude_range['max'], depth_range['min'], depth_range['max'], date_range['start'], date_range['end'], forecast_date))
         conn.commit()
         conn.close()
 
         last_entry = get_last_entry()
-        print(last_entry)
+        logging.debug(last_entry)
         sqlite_file = 'Python/static/final_earthquake_catalogue_v2.db'
         table_name = 'earthquake_database'  
 
         id, algorithm, magnitude_min, magnitude_max, depth_min, depth_max, start_date, end_date, forecast_date = last_entry
         filtered_data = get_earthquake_data(magnitude_min, magnitude_max, depth_min, depth_max, start_date, end_date)
-        result=forecast_earthquakes_ARIMA(magnitude_min, magnitude_max, depth_min, depth_max, forecast_date, sqlite_file, table_name)
-        print(algorithm)
-        print("pass here")
-        print("pass 2")
-        print("pass here 1:")
+
+        # Ensure thread-safe plotting with lock
+        with plot_lock:
+            json_output, plot_file_path = forecast_earthquakes_ARIMA(magnitude_min, magnitude_max, depth_min, depth_max, forecast_date, sqlite_file, table_name)  # Unpack the result
+
+        logging.debug(forecast_date)
+        logging.debug("pass here")
+        logging.debug("pass 2")
+        logging.debug("pass here 1:")
 
         response = {
             'status': 'success',
-            'message': 'Time series performed successfully'
+            'forecast_results': json_output,  # Send the forecast results
+            'plot_file_path': f'/static/{plot_file_path}'
         }
-        return jsonify(result)
+        return jsonify(response)
     
     except Exception as e:
         logging.error(f"Error during clustering: {str(e)}")
@@ -189,25 +212,16 @@ def perform_clustering():
         }
         return jsonify(response), 500
 
-def convert_to_millis(date_str):
-    try:
-        dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
-    except ValueError:
-        try:
-            dt = datetime.strptime(date_str, "%d %b %Y - %I:%M %p")
-        except ValueError:
-            print(f"Error parsing date: {date_str}")
-            return None
-    return int(dt.timestamp() * 1000)
-
 @app.route('/update-dataset', methods=['POST'])
 def update_dataset():
     try:
         data = request.json.get('data')
         options = request.json.get('options')
+        print(data)
+        
         if not data:
             raise ValueError("No data received")
-
+        
         conn = sqlite3.connect('Python/static/final_earthquake_catalogue_v2.db')
         cursor = conn.cursor()
 
@@ -215,8 +229,14 @@ def update_dataset():
             cursor.execute('DELETE FROM earthquake_database')
 
         for row in data:
-            date_time, latitude, longitude, depth, magnitude, location = row
+            date_time = row['date_time']
+            latitude = row['latitude']
+            longitude = row['longitude']
+            depth = row['depth']
+            magnitude = row['magnitude']
+            location = row['location']
             millis = convert_to_millis(date_time)
+            
             cursor.execute('''
                 INSERT INTO earthquake_database (Date_Time, Latitude, Longitude, Depth, Mag, Location, Millis)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -239,7 +259,9 @@ def update_dataset():
         }
         return jsonify(response), 500
 
-
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(app.static_folder, filename)
 
 if __name__ == '__main__':
     init_db()

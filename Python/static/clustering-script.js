@@ -1,3 +1,5 @@
+let parsed_values = []; 
+
 document.addEventListener("paste", event => {
   const pasted_value = event.clipboardData.getData("text");
   show_paste_interface(pasted_value);
@@ -72,7 +74,7 @@ function parse_pasted_value(string) {
     throw new Error("Invalid format for parsing pasted values.");
   }
 
-  const parsed_values = [];
+  // const parsed_values = [];
   for (const line of lines) {
     const arguments = line.split(separator).map(arg => arg.trim());
     let [date_time, latitude, longitude, depth, magnitude, location] = arguments;
@@ -262,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
         method: 'append',
         // Add more options as needed
       };
-      add_to_dataset(options);
+      add_to_dataset(parsed_values, options);
       dataset_popup.close();
     }
   });
@@ -289,30 +291,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // Function to update dataset   
-function add_to_dataset(options) {
-  const table = document.querySelector('#dataset-updater-popup #dataset-table');
-  if (!table) {
-    console.error('Table with ID "dummy-table" not found in the DOM');
+function add_to_dataset(parsed_values, options) {
+  if (!parsed_values || parsed_values.length === 0) {
+    console.error('No parsed values available to add to the dataset');
     return;
   }
-
-  const rows = table.querySelectorAll('tr:not(:first-child, :last-child)');
-
-  const data = [];
-
-  rows.forEach(row => {
-    const cells = row.querySelectorAll('td');
-    const rowData = [];
-    cells.forEach(cell => rowData.push(cell.textContent));
-    data.push(rowData);
-  });
 
   fetch('/update-dataset', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ data, options }),
+    body: JSON.stringify({ data: parsed_values, options }), // Use the passed parsed_values
   })
   .then(response => response.json())
   .then(result => {

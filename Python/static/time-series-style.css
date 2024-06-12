@@ -151,3 +151,42 @@ label.forecast-algorithm {
   border: 1px solid red;
   display: flex;
 }
+
+
+
+
+/* See more button */
+
+.toggle-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mock-toggle {
+  cursor: pointer;
+  user-select: none;
+}
+
+#forecast-chart-container {
+  display: none; /* Initially hidden */
+  padding-top: 100px; /* Add padding to separate the mock-toggle and the image */
+}
+
+.graph {
+  max-width: 100%;  /* Ensure the image scales with the container */
+  height: auto;  /* Maintain aspect ratio */
+  margin-top: 10px;  /* Add some spacing if needed */
+}
+
+
+/* Define styles for actual-data and forecast-data */
+
+/* .actual-data {
+  color: blue; 
+}
+
+.forecast-data {
+  color: rgb(128, 77, 0);
+} */
+
