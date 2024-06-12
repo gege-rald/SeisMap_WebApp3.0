@@ -22,9 +22,9 @@
 
         <nav class="navbar">
             <!-- <a href="#home" class="active">Explore</a> -->
-            <a href="#clustering" class="active">Clustering</a>
-            <a href="#timeseries">Time Series</a>
-            <a href="#about">About</a>
+            <!-- <a href="#clustering" class="active">Clustering</a> -->
+            <a href="#timeseries" class="active">Time Series</a>
+            <!-- <a href="#about">About</a> -->
         </nav>
     </header>
 
@@ -38,9 +38,9 @@
                 aspernatur libero tempora, nisi, cupiditate deserunt asperiores explicabo totam, ipsam ea perferendis.
                 Autem numquam ut possimus obcaecati.</p>
             <div class="btn-box">
-                <a href="#home">Get Started</a>
-                <a href="#clustering">Cluster</a>
-                <a href="#timeseries">Time Series</a>
+                <a href="#timseries">Get Started</a>
+                <!-- <a href="#clustering">Cluster</a>
+                <a href="#timeseries">Time Series</a> -->
             </div>
         </div>
 
@@ -51,15 +51,15 @@
         <iframe src="{{ url_for('static', filename='explore.html')}}" frameborder="0" scrolling="no"
             style="width: 100%; height: 700px;"></iframe>
     </section> -->
-    <section id="clustering" class="main-section">
+    <!-- <section id="clustering" class="main-section">
         <iframe src="{{ url_for('static', filename='clustering.html')}}" frameborder="0" scrolling="no"
             style="width: 100%; height: 700px;"></iframe>
-    </section>
+    </section> -->
     <section id="timeseries" class="main-section">
         <iframe src="{{ url_for('static', filename='time-series.html')}}" frameborder="0" scrolling="no"
             style="width: 100%; height: 700px;"></iframe>
     </section>
-    <section id="about" class="main-section">About</section>
+    <!-- <section id="about" class="main-section">About</section> -->
 
     <script src="{{ url_for('static', filename='script.js')}}"></script>
     <script src="{{ url_for('static', filename='dsl-utils.js')}}"></script>

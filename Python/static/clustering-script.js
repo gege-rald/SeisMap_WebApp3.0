@@ -250,6 +250,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+
+    // Listen for the paste event
+    document.addEventListener("paste", event => {
+      const pasted_value = event.clipboardData.getData("text");
+      show_paste_interface(pasted_value);
+      // Call the function to add pasted values to the dataset after the paste event
+      add_pasted_values({ override: false });
+    });
+
+    
   replace_node(dummy_table, Table);
   dataset_table_element = Table;
 

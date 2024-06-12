@@ -7,27 +7,39 @@ from sklearn.metrics import silhouette_score, davies_bouldin_score
 import itertools
 from datetime import datetime
 
-def prfrm_clustering(magnitude_range, depth_range, date_range, sqlite_file, table_name):
+def prfrm_clustering(magnitude_min, magnitude_max, depth_min, depth_max, start_date, end_date, sqlite_file, table_name):
+
+    print("Code passed here")
     try:
-        logging.info("Connecting to SQLite database...")
+        print("Connection established")
+        # logging.info("Connecting to SQLite database...")
         conn = sqlite3.connect(sqlite_file)
         query = f"SELECT * FROM {table_name}"
         data = pd.read_sql(query, conn)
         conn.close()
-        logging.info("Data loaded successfully.")
+        # logging.info("Data loaded successfully.")
 
         data['Mag'] = pd.to_numeric(data['Mag'], errors='coerce')
         data['Depth'] = pd.to_numeric(data['Depth'], errors='coerce')
-        data['Date'] = pd.to_datetime(data['Date'], errors='coerce')
+        data['Date_Time'] = pd.to_datetime(data['Date_Time'], errors='coerce')
 
+        # print(data['Date_Time'], data['Mag'])
+        # Extract only the date part from the Date_Time column
+        data['Date'] = data['Date_Time'].dt.date
         data = data.dropna(subset=['Mag', 'Depth', 'Date'])
 
+        # Ensure the dates are in 'datetime.date' format
+        start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+
         filtered_data = data[
-            (data['Mag'] >= magnitude_range['min']) & (data['Mag'] <= magnitude_range['max']) &
-            (data['Depth'] >= depth_range['min']) & (data['Depth'] <= depth_range['max']) &
-            (data['Date'] >= pd.Timestamp(date_range['start'])) & (data['Date'] <= pd.Timestamp(date_range['end']))
+            (data['Mag'] >= magnitude_min) & (data['Mag'] <= magnitude_max) &
+            (data['Depth'] >= depth_min) & (data['Depth'] <= depth_max) &
+            (data['Date'] >= start_date) & (data['Date'] <= end_date)
         ]
-        logging.info("Data filtered successfully.")
+
+        # print(f"filterd_data = {filtered_data}")
+        # logging.info("Data filtered successfully.")
 
         if filtered_data.empty:
             raise ValueError("No data points found after applying the filtering criteria.")
@@ -38,11 +50,18 @@ def prfrm_clustering(magnitude_range, depth_range, date_range, sqlite_file, tabl
         epsilons = np.linspace(0.01, 1, num=15)
         combinations = list(itertools.product(epsilons, min_samples))
 
+        # print(f"lat_long = {lat_long}")
+        # print(f"min_samples = {min_samples}")
+        # print(f"epsilons = {epsilons}")
+        # print(f"combinations = {combinations}")
+
         def get_scores_and_labels(combinations, X, N):
             scores = []
             all_labels_list = []
 
             for i, (eps, num_samples) in enumerate(combinations):
+                print(i)
+                print(f"scores  = {scores}") 
                 try:
                     dbscan_cluster_model = DBSCAN(eps=eps, min_samples=num_samples).fit(X)
                     labels = dbscan_cluster_model.labels_
@@ -66,6 +85,11 @@ def prfrm_clustering(magnitude_range, depth_range, date_range, sqlite_file, tabl
             best_labels = all_labels_list[best_index]
             best_score = scores[best_index]
 
+            print(f"best_index  = { best_index}")
+            print(f"best_parameters  = {best_parameters}")
+            print(f"best_labels  = {best_labels}")
+            print(f"best_score  = {best_score}") 
+
             return {
                 'best_epsilon': best_parameters[0],
                 'best_min_samples': best_parameters[1],
@@ -74,9 +98,12 @@ def prfrm_clustering(magnitude_range, depth_range, date_range, sqlite_file, tabl
             }
 
         best_dict = get_scores_and_labels(combinations, lat_long, len(combinations))
+        print(f"best_dict = {best_dict}") 
+        
 
         best_model = DBSCAN(eps=best_dict['best_epsilon'], min_samples=best_dict['best_min_samples']).fit(lat_long)
-        filtered_data['y'] = best_dict['best_labels']
+        filtered_data.loc[:, 'y'] = best_dict['best_labels']
+
 
         if len(set(best_dict['best_labels'])) <= 1:
             raise ValueError("DBSCAN resulted in a single cluster or no clusters. Adjust parameters and try again.")
@@ -92,6 +119,10 @@ def prfrm_clustering(magnitude_range, depth_range, date_range, sqlite_file, tabl
         avg_silhouette_score = np.mean(silhouette_scores)
         avg_dbi_score = np.mean(dbi_scores)
 
+        # Print the highest cluster value in the 'y' column
+        # highest_cluster_value = filtered_data['y'].max()
+        # print(f"Highest cluster value: {highest_cluster_value}")
+
         return {
             'best_epsilon': best_dict['best_epsilon'],
             'best_min_samples': best_dict['best_min_samples'],
@@ -106,12 +137,15 @@ def prfrm_clustering(magnitude_range, depth_range, date_range, sqlite_file, tabl
         logging.error(f"An error occurred: {str(e)}")
         raise e
 
-# Example usage:
-magnitude_range = {'max': 6.0, 'min': 4.0}
-depth_range = {'max': 70, 'min': 10}
-date_range = {'end': '2021-01-01', 'start': '2020-01-01'}
-sqlite_file = 'Python/static/final_earthquake_catalogue.db'
-table_name = 'earthquake_database'  # Update with your table name
+# # Example usage:
+# magnitude_min = 1.0
+# magnitude_max = 7.4
+# depth_min = 0
+# depth_max = 1000
+# start_date = '2020-01-01'
+# end_date = '2021-12-31'
+# sqlite_file = 'Python/static/final_earthquake_catalogue_v2.db'
+# table_name = 'earthquake_database'  
 
-results = prfrm_clustering(magnitude_range, depth_range, date_range, sqlite_file, table_name)
-#print("Clustering Results:", results)
+# results = prfrm_clustering(magnitude_min, magnitude_max, depth_min, depth_max, start_date, end_date, sqlite_file, table_name)
+# print("Clustering Results:", results)

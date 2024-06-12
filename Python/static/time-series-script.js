@@ -14,6 +14,7 @@ const lookup_month = [
   'December',
 ];
 
+//DatasetUpdater
 document.addEventListener('DOMContentLoaded', () => {
   const predict_input = document.querySelector('#prediction-start-date');
   predict_input.addEventListener('input', update_forecast_dates);
@@ -74,4 +75,73 @@ function get_forecast_dates(start_date) {
   }
 
   return { months, days, possible_second_month_index };
+}
+
+
+// //sending of dataset update
+document.addEventListener('click', function(event) {
+  // Check if the clicked element is the button that triggers the dataset update
+  if (event.target && event.target.classList.contains('add-to-dataset-button')) {
+    // Nested event listener for the "Add row" button
+    add_to_dataset({ override: false });
+    const addRowButton = event.target.closest('.wrapper').querySelector('.add-row-button');
+    if (addRowButton) {
+      addRowButton.addEventListener('click', function() {
+        // Call the add_to_dataset function when the "Add row" button is clicked
+        add_to_dataset({ override: false });
+      });
+    } else {
+      console.error('Add row button not found');
+    }
+  }
+});
+
+document.addEventListener("paste", event => {
+  const pasted_value = event.clipboardData.getData("text");
+  show_paste_interface(pasted_value);
+
+  // Call the function to add pasted values to the dataset after the paste event
+  add_pasted_values({ override: false });
+});
+
+
+// Function to add to dataset
+function add_to_dataset(options) {
+  const table = document.getElementById('dummy-table');
+  console.log(table);
+  if (!table) {
+    console.error('Table with ID "dummy-table" not found in the DOM');
+    return;
+  }
+
+  const rows = table.querySelectorAll('tr:not(:first-child, :last-child)');
+
+  const data = [];
+
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    const rowData = [];
+    cells.forEach(cell => rowData.push(cell.textContent));
+    data.push(rowData);
+  });
+
+  fetch('/update-dataset', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ data, options }),
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.status === 'success') {
+      alert('Dataset updated successfully!');
+    } else {
+      alert('Error updating dataset: ' + result.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error updating dataset');
+  });
 }
