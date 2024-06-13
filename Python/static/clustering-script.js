@@ -244,7 +244,7 @@ function generate_row({
     Location.setAttribute('maxlength', 255);
     Location.setAttribute('size', 20);
 
-    Location.setAttribute('placeholder', location);
+    Location.setAttribute('value', location);
     form_elements.push(Location);
   }
  
@@ -309,15 +309,20 @@ function add_to_dataset(parsed_values, options) {
     return;
   }
 
+  const table = document.querySelector('#dataset-table');
   const rows = table.querySelectorAll('tr:not(:first-child, :last-child)');
 
   const data = [];
 
   rows.forEach(row => {
-    const cells = row.querySelectorAll('td');
-    const rowData = [];
-    cells.forEach(cell => rowData.push(cell.textContent));
-    data.push(rowData);
+    data.push({
+      date_time: row.querySelector('.date-time').value,
+      latitude: row.querySelector('.latitude').value,
+      longitude: row.querySelector('.longitude').value,
+      depth: row.querySelector('.depth').value,
+      magnitude: row.querySelector('.magnitude').value,
+      location: row.querySelector('.location').value,
+    });
   });
 
   fetch('/update-dataset', {
