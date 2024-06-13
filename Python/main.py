@@ -219,17 +219,6 @@ def perform_clustering():
 def update_dataset():
     try:
         # check rows
-        conn = sqlite3.connect('Python/static/final_earthquake_catalogue_v2.db')
-
-        cursor = conn.cursor()
-        cursor.execute("select * from PRAGMA_TABLE_INFO('earthquake_database')")
-        column_names = [row[1] for row in cursor.fetchall()]
-        for name in column_names:
-            print("name:", name)
-
-        conn.commit()
-        conn.close()
-
         data = request.json.get('data')
         options = request.json.get('options')
         logging.debug(data)
@@ -262,6 +251,8 @@ def update_dataset():
         conn.commit()
         conn.close()
 
+        # Update date range in the date picker after successful update
+        update_date_range()
 
         response = {
             'status': 'success',
