@@ -8,6 +8,8 @@ import pandas as pd
 import numpy as np
 from clustering_dbscan import prfrm_clustering
 from time_series_ARIMA import forecast_earthquakes_ARIMA
+from time_series_SARIMA import forecast_earthquakes_sarima
+from time_series_LSTM import forecast_earthquakes_LSTM
 import os
 
 app = Flask(__name__, template_folder='HTML', static_folder='static')
@@ -55,21 +57,13 @@ def get_last_entry():
 def convert_to_millis(date_str):
     try:
         dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
-        # sprint("pass on first try")
     except ValueError:
         try:
             dt = datetime.strptime(date_str, "%d %b %Y - %I:%M %p")
-            # print("pass on second try")
         except ValueError:
-            try:
-                dt = datetime.strptime(date_str, "%Y-%m-%dT%H:%M")
-                # print("pass on third try")
-            except ValueError:
-                print(f"Error parsing date: {date_str}")
-                return None
-    
-    millis = int(dt.timestamp() * 1000)
-    return millis
+            print(f"Error parsing date: {date_str}")
+            return None
+    return int(dt.timestamp() * 1000)
 
 def update_millis(db_file):
     conn = sqlite3.connect(db_file)
@@ -190,7 +184,15 @@ def perform_clustering():
 
         # Ensure thread-safe plotting with lock
         with plot_lock:
-            json_output, plot_file_path = forecast_earthquakes_ARIMA(magnitude_min, magnitude_max, depth_min, depth_max, forecast_date, sqlite_file, table_name)  # Unpack the result
+            # Perform forecasting based on the selected algorithm
+            if algorithm == 'arima':
+                json_output, plot_file_path =  forecast_earthquakes_ARIMA(magnitude_min, magnitude_max, depth_min, depth_max, forecast_date, sqlite_file, table_name)
+            elif algorithm == 'sarima':
+                json_output, plot_file_path =  forecast_earthquakes_sarima(magnitude_min, magnitude_max, depth_min, depth_max, forecast_date, sqlite_file, table_name)
+            elif algorithm == 'lstm':
+                json_output, plot_file_path = forecast_earthquakes_LSTM(magnitude_min, magnitude_max, depth_min, depth_max, forecast_date, sqlite_file, table_name)
+            else:
+                raise ValueError(f"Unsupported algorithm: {algorithm}")
 
         logging.debug(forecast_date)
         logging.debug("pass here")
@@ -212,12 +214,13 @@ def perform_clustering():
         }
         return jsonify(response), 500
 
+
 @app.route('/update-dataset', methods=['POST'])
 def update_dataset():
     try:
         data = request.json.get('data')
         options = request.json.get('options')
-        print(data)
+        logging.debug(data)
         
         if not data:
             raise ValueError("No data received")
@@ -226,21 +229,16 @@ def update_dataset():
         cursor = conn.cursor()
 
         if options and options.get('override'):
-            cursor.execute('DELETE FROM earthquake_database')
+            cursor.execute('DELETE FROM earthquake_data')
 
         for row in data:
-            date_time = row['date_time']
-            latitude = row['latitude']
-            longitude = row['longitude']
-            depth = row['depth']
-            magnitude = row['magnitude']
-            location = row['location']
+            date_time, latitude, longitude, depth, magnitude, location = row
             millis = convert_to_millis(date_time)
             
             cursor.execute('''
-                INSERT INTO earthquake_database (Date_Time, Latitude, Longitude, Depth, Mag, Location, Millis)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ''', (date_time, latitude, longitude, depth, magnitude, location, millis))
+                INSERT INTO earthquake_data (start_date, latitude, longitude, depth_min, depth_max, magnitude_min, magnitude_max, location)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (date_time, latitude, longitude, depth, depth, magnitude, magnitude, location))
 
         conn.commit()
         conn.close()
@@ -258,6 +256,7 @@ def update_dataset():
             'message': str(e)
         }
         return jsonify(response), 500
+
 
 @app.route('/static/<path:filename>')
 def serve_static(filename):

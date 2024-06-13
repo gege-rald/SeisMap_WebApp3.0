@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   update_forecast_dates({ target: predict_input });
 
-  iframe_send_notification({ title: "Model updating...", timer: true });
+  // iframe_send_notification({ title: "Model updating...", timer: true });
 });
 
 function update_forecast_dates(event) {

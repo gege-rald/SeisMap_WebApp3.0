@@ -184,12 +184,16 @@ function generate_row({
   {
     const DateTime = document.createElement('input');
     DateTime.setAttribute('type', 'datetime-local');
+    DateTime.classList.add('date-time');
+
 
     DateTime.setAttribute('value', date_time);
     form_elements.push(DateTime);
   }
   {
     const Latitude = document.createElement('input');
+    Latitude.classList.add('latitude');
+
     Latitude.setAttribute('type', 'number');
     Latitude.setAttribute('min', -90);
     Latitude.setAttribute('max', 90);
@@ -199,6 +203,8 @@ function generate_row({
   }
   {
     const Longitude = document.createElement('input');
+    Longitude.classList.add('longitude');
+
     Longitude.setAttribute('type', 'number');
     Longitude.setAttribute('min', -180);
     Longitude.setAttribute('max', 180);
@@ -208,6 +214,8 @@ function generate_row({
   }
   {
     const Depth = document.createElement('input');
+    Depth.classList.add('depth');
+
     Depth.setAttribute('type', 'number');
     Depth.setAttribute('min', 0);
     Depth.setAttribute('max', 999);
@@ -217,6 +225,8 @@ function generate_row({
   }
   {
     const Magnitude = document.createElement('input');
+    Magnitude.classList.add('magnitude');
+
     Magnitude.setAttribute('type', 'number');
     Magnitude.setAttribute('min', 1.0);
     Magnitude.setAttribute('max', 10.0);
@@ -227,6 +237,8 @@ function generate_row({
   }
   {
     const Location = document.createElement('input');
+    Location.classList.add('location');
+
     Location.setAttribute('type', 'text');
     Location.setAttribute('minlength', 5);
     Location.setAttribute('maxlength', 255);
@@ -296,6 +308,17 @@ function add_to_dataset(parsed_values, options) {
     console.error('No parsed values available to add to the dataset');
     return;
   }
+
+  const rows = table.querySelectorAll('tr:not(:first-child, :last-child)');
+
+  const data = [];
+
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    const rowData = [];
+    cells.forEach(cell => rowData.push(cell.textContent));
+    data.push(rowData);
+  });
 
   fetch('/update-dataset', {
     method: 'POST',
