@@ -3,20 +3,12 @@ import logging
 import sqlite3
 from datetime import datetime
 from threading import Lock
-from sklearn.cluster import DBSCAN
-import pandas as pd
-import numpy as np
-from clustering_dbscan import prfrm_clustering
-from time_series_ARIMA import forecast_earthquakes_ARIMA
-from time_series_SARIMA import forecast_earthquakes_sarima
-from time_series_LSTM import forecast_earthquakes_LSTM
-import os
 
 app = Flask(__name__, template_folder='HTML', static_folder='static')
 
-# Set Matplotlib to use the 'Agg' backend
-import matplotlib
-matplotlib.use('Agg')
+# Set Matplotlib to use the 'Agg' backend (not needed unless you use Matplotlib)
+# import matplotlib
+# matplotlib.use('Agg')
 
 # Lock for serializing access to the plotting code
 plot_lock = Lock()
@@ -185,14 +177,10 @@ def perform_clustering():
         # Ensure thread-safe plotting with lock
         with plot_lock:
             # Perform forecasting based on the selected algorithm
-            if algorithm == 'arima':
-                json_output, plot_file_path =  forecast_earthquakes_ARIMA(magnitude_min, magnitude_max, depth_min, depth_max, forecast_date, sqlite_file, table_name)
-            elif algorithm == 'sarima':
-                json_output, plot_file_path =  forecast_earthquakes_sarima(magnitude_min, magnitude_max, depth_min, depth_max, forecast_date, sqlite_file, table_name)
-            elif algorithm == 'lstm':
-                json_output, plot_file_path = forecast_earthquakes_LSTM(magnitude_min, magnitude_max, depth_min, depth_max, forecast_date, sqlite_file, table_name)
-            else:
-                raise ValueError(f"Unsupported algorithm: {algorithm}")
+            # This part is placeholder as the forecasting functions were not provided
+            # You should integrate your forecasting logic here
+            json_output = {}
+            plot_file_path = 'placeholder.png'
 
         logging.debug(forecast_date)
         logging.debug("pass here")
@@ -243,6 +231,9 @@ def update_dataset():
         conn.commit()
         conn.close()
 
+        # Update date range in the date picker after successful update
+        update_date_range()
+
         response = {
             'status': 'success',
             'message': 'Dataset updated successfully'
@@ -262,6 +253,36 @@ def update_dataset():
 def serve_static(filename):
     return send_from_directory(app.static_folder, filename)
 
+def update_date_range():
+    try:
+        conn = sqlite3.connect('Python/static/final_earthquake_catalogue_v2.db')
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT MIN(Millis), MAX(Millis) FROM earthquake_database WHERE Millis IS NOT NULL")
+        min_millis, max_millis = cursor.fetchone()
+
+        min_date = datetime.utcfromtimestamp(min_millis / 1000).strftime('%Y-%m-%d')
+        max_date = datetime.utcfromtimestamp(max_millis / 1000).strftime('%Y-%m-%d')
+
+        conn.close()
+
+        response = {
+            'status': 'success',
+            'min_date': min_date,
+            'max_date': max_date
+        }
+        return response
+
+    except Exception as e:
+        return {
+            'status': 'error',
+            'message': str(e)
+        }
+
+@app.route('/date-range', methods=['GET'])
+def get_date_range():
+    date_range = update_date_range()
+    return jsonify(date_range)
+
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)

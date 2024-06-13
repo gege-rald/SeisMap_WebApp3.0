@@ -11,6 +11,52 @@
   <link rel="stylesheet" href="clustering-style-addons.css">
   <link rel="stylesheet" href="time-series-style.css">
   <script src="forecast.js" defer></script>
+
+      <!-- Include jQuery from CDN -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+      <script>
+          $(document).ready(function() {
+              // Function to update date range picker
+              function updateDateRangePicker() {
+                  $.ajax({
+                      url: '/date-range',
+                      type: 'GET',
+                      success: function(data) {
+                          // Update your date picker input
+                          $('#prediction-start-date').attr('min', data.min_date);
+                          $('#prediction-start-date').attr('max', data.max_date);
+                          console.log('Date range updated successfully:', data.min_date, data.max_date);
+                      },
+                      error: function(xhr, status, error) {
+                          console.error('Error updating date range:', error);
+                      }
+                  });
+              }
+  
+              // Call updateDateRangePicker when the page loads
+              updateDateRangePicker();
+  
+              // Example: Trigger updateDateRangePicker after a successful dataset update
+              $('#update-dataset-button').click(function() {
+                  // Perform dataset update AJAX call (you need to implement this)
+                  $.ajax({
+                      url: '/update-dataset',
+                      type: 'POST',
+                      contentType: 'application/json',
+                      data: JSON.stringify({ /* Your data payload */ }),
+                      success: function(response) {
+                          console.log('Dataset updated successfully:', response);
+                          // Update date range picker after dataset update
+                          updateDateRangePicker();
+                      },
+                      error: function(xhr, status, error) {
+                          console.error('Error updating dataset:', error);
+                      }
+                  });
+              });
+          });
+      </script>
+  
 </head>
 
 <body>
