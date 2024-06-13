@@ -59,7 +59,7 @@ def convert_to_millis(date_str):
         dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
     except ValueError:
         try:
-            dt = datetime.strptime(date_str, "%d %b %Y - %I:%M %p")
+            dt = datetime.strptime(date_str, "%Y-%m-%dT%H:%M")
         except ValueError:
             print(f"Error parsing date: {date_str}")
             return None
@@ -218,6 +218,18 @@ def perform_clustering():
 @app.route('/update-dataset', methods=['POST'])
 def update_dataset():
     try:
+        # check rows
+        conn = sqlite3.connect('Python/static/final_earthquake_catalogue_v2.db')
+
+        cursor = conn.cursor()
+        cursor.execute("select * from PRAGMA_TABLE_INFO('earthquake_database')")
+        column_names = [row[1] for row in cursor.fetchall()]
+        for name in column_names:
+            print("name:", name)
+
+        conn.commit()
+        conn.close()
+
         data = request.json.get('data')
         options = request.json.get('options')
         logging.debug(data)
@@ -226,22 +238,30 @@ def update_dataset():
             raise ValueError("No data received")
         
         conn = sqlite3.connect('Python/static/final_earthquake_catalogue_v2.db')
+        conn.set_trace_callback(print)
         cursor = conn.cursor()
 
         if options and options.get('override'):
             cursor.execute('DELETE FROM earthquake_data')
 
         for row in data:
-            date_time, latitude, longitude, depth, magnitude, location = row
+            date_time = row.get('date_time')
+            latitude = row.get('latitude')
+            longitude = row.get('longitude')
+            depth = row.get('depth')
+            magnitude = row.get('magnitude')
+            location = row.get('location')
+
             millis = convert_to_millis(date_time)
             
             cursor.execute('''
-                INSERT INTO earthquake_data (start_date, latitude, longitude, depth_min, depth_max, magnitude_min, magnitude_max, location)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (date_time, latitude, longitude, depth, depth, magnitude, magnitude, location))
+                INSERT INTO earthquake_database (date_time, latitude, longitude, depth, mag, location, millis)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (date_time, latitude, longitude, depth, magnitude, location, millis))
 
         conn.commit()
         conn.close()
+
 
         response = {
             'status': 'success',
