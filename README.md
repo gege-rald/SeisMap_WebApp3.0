@@ -20,3 +20,13 @@ These range seekers are set to the specific arguments/parameters the users want 
 These are components for (1)Choosing 15 days of forecasts based on the available data in the dataset and (2)Algorithm choice of the user
 
 ![TS_forecast_date!](Python/user_manual/forecast_date.png)
+
+
+Choosing the 15 days forecast in the calendar
+
+![TS_forecast_date!](Python/user_manual/date_chooser.png)
+
+Choosing the algorithm the user wants to train the data on
+
+![TS_forecast_date!](Python/user_manual/algorithm_picker.png)
+
