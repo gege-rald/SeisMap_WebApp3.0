@@ -1,0 +1,77 @@
+[
+    {
+        "date": "2023-11-26",
+        "actual_value": 17,
+        "predicted_value": 27
+    },
+    {
+        "date": "2023-11-27",
+        "actual_value": 14,
+        "predicted_value": 31
+    },
+    {
+        "date": "2023-11-28",
+        "actual_value": 8,
+        "predicted_value": 34
+    },
+    {
+        "date": "2023-11-29",
+        "actual_value": 12,
+        "predicted_value": 37
+    },
+    {
+        "date": "2023-11-30",
+        "actual_value": 16,
+        "predicted_value": 38
+    },
+    {
+        "date": "2023-12-01",
+        "actual_value": 18,
+        "predicted_value": 40
+    },
+    {
+        "date": "2023-12-02",
+        "actual_value": 18,
+        "predicted_value": 41
+    },
+    {
+        "date": "2023-12-03",
+        "actual_value": 246,
+        "predicted_value": 42
+    },
+    {
+        "date": "2023-12-04",
+        "actual_value": 213,
+        "predicted_value": 42
+    },
+    {
+        "date": "2023-12-05",
+        "actual_value": 179,
+        "predicted_value": 43
+    },
+    {
+        "date": "2023-12-06",
+        "actual_value": 188,
+        "predicted_value": 43
+    },
+    {
+        "date": "2023-12-07",
+        "actual_value": 174,
+        "predicted_value": 44
+    },
+    {
+        "date": "2023-12-08",
+        "actual_value": 156,
+        "predicted_value": 44
+    },
+    {
+        "date": "2023-12-09",
+        "actual_value": 134,
+        "predicted_value": 44
+    },
+    {
+        "date": "2023-12-10",
+        "actual_value": 135,
+        "predicted_value": 44
+    }
+]

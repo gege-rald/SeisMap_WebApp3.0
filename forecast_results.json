@@ -1,0 +1,77 @@
+[
+    {
+        "date": "2024-01-03",
+        "actual_value": 74,
+        "predicted_value": 31
+    },
+    {
+        "date": "2024-01-04",
+        "actual_value": 17,
+        "predicted_value": 34
+    },
+    {
+        "date": "2024-01-05",
+        "actual_value": null,
+        "predicted_value": 37
+    },
+    {
+        "date": "2024-01-06",
+        "actual_value": null,
+        "predicted_value": 39
+    },
+    {
+        "date": "2024-01-07",
+        "actual_value": null,
+        "predicted_value": 41
+    },
+    {
+        "date": "2024-01-08",
+        "actual_value": null,
+        "predicted_value": 42
+    },
+    {
+        "date": "2024-01-09",
+        "actual_value": null,
+        "predicted_value": 42
+    },
+    {
+        "date": "2024-01-10",
+        "actual_value": null,
+        "predicted_value": 43
+    },
+    {
+        "date": "2024-01-11",
+        "actual_value": null,
+        "predicted_value": 43
+    },
+    {
+        "date": "2024-01-12",
+        "actual_value": null,
+        "predicted_value": 44
+    },
+    {
+        "date": "2024-01-13",
+        "actual_value": null,
+        "predicted_value": 44
+    },
+    {
+        "date": "2024-01-14",
+        "actual_value": null,
+        "predicted_value": 44
+    },
+    {
+        "date": "2024-01-15",
+        "actual_value": null,
+        "predicted_value": 45
+    },
+    {
+        "date": "2024-01-16",
+        "actual_value": null,
+        "predicted_value": 45
+    },
+    {
+        "date": "2024-01-17",
+        "actual_value": null,
+        "predicted_value": 45
+    }
+]
