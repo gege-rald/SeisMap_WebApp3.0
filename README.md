@@ -4,4 +4,5 @@ SeisMap Time Series Analysis - User Manual
 
 Landing Page
 
-![CHEESE!](seismap_homepage.png)
+![CHEESE!](Python/user_manual/seismap_homepage.png)
+
